@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wards | BWI-RHA Ekiti</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<div class="container nav-inner">
+
+<a href="index.html" class="logo">
+BWI-RHA <span>EKITI</span>
+</a>
+
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+<div class="nav-links" id="navLinks">
+
+<a href="index.html">Home</a>
+<a href="lga.html">LGAs</a>
+
+</div>
+
+</div>
+
+</nav>
+
+<section class="page-header">
+
+<div class="container">
+
+<h1 id="lgaName">
+Loading...
+</h1>
+
+<p>
+Wards under this Local Government.
+</p>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<div id="wardsGrid" class="grid">
+
+Loading wards...
+
+</div>
+
+</div>
+
+</section>
+
+<script src="supabase.js"></script>
+
+<script>
+
+function toggleMenu() {
+
+document
+.getElementById("navLinks")
+.classList.toggle("open");
+
+}
+
+const params =
+new URLSearchParams(window.location.search);
+
+const lgaId =
+params.get("lga");
+
+async function loadWards() {
+
+const grid =
+document.getElementById("wardsGrid");
+
+if (!lgaId) {
+
+grid.innerHTML =
+`<div class="alert alert-error">
+No LGA selected.
+</div>`;
+
+return;
+
+}
+
+const { data: lga, error: lgaError } =
+await db
+.from("lgas")
+.select("*")
+.eq("id", lgaId)
+.maybeSingle();
+
+if (lgaError || !lga) {
+
+grid.innerHTML =
+`<div class="alert alert-error">
+LGA not found.
+</div>`;
+
+return;
+
+}
+
+document.getElementById("lgaName")
+.textContent = lga.name;
+
+const { data: wards, error } =
+await db
+.from("wards")
+.select("*")
+.eq("lga_id", lgaId)
+.order("name");
+
+if (error) {
+
+grid.innerHTML =
+`<div class="alert alert-error">
+${escapeHTML(error.message)}
+</div>`;
+
+return;
+
+}
+
+grid.innerHTML = "";
+
+(wards || []).forEach(ward => {
+
+const card =
+document.createElement("div");
+
+card.className = "card";
+
+card.innerHTML = `
+
+<h3>
+${escapeHTML(ward.name)}
+</h3>
+
+<br>
+
+<a
+class="btn btn-primary"
+href="ward.html?ward=${encodeURIComponent(ward.id)}"
+>
+View Ward
+</a>
+
+`;
+
+grid.appendChild(card);
+
+});
+
+}
+
+loadWards();
+
+</script>
+
+</body>
+</html>
