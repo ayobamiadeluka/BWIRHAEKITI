@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Create Account | BWI-RHA</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<div class="container nav-inner">
+
+<a href="index.html" class="logo">
+BWI-RHA <span>EKITI</span>
+</a>
+
+</div>
+
+</nav>
+
+<div class="container">
+
+<div class="form-wrapper">
+
+<h2>Create Account</h2>
+
+<p>
+Create your member account before registration.
+</p>
+
+<br>
+
+<div id="message"></div>
+
+<form id="accountForm">
+
+<div class="form-group">
+
+<label>Email Address</label>
+
+<input
+type="email"
+id="email"
+class="form-control"
+required
+>
+
+</div>
+
+<div class="form-group">
+
+<label>Password</label>
+
+<input
+type="password"
+id="password"
+class="form-control"
+minlength="6"
+required
+>
+
+</div>
+
+<div class="form-group">
+
+<label>Confirm Password</label>
+
+<input
+type="password"
+id="confirmPassword"
+class="form-control"
+minlength="6"
+required
+>
+
+</div>
+
+<button class="btn btn-primary" type="submit">
+Create Account
+</button>
+
+</form>
+
+<br>
+
+<p>
+Already have an account?
+<a href="login.html" style="color:#087f3f;">
+Login
+</a>
+</p>
+
+</div>
+
+</div>
+
+<script src="supabase.js"></script>
+
+<script>
+
+document
+.getElementById("accountForm")
+.addEventListener("submit", async function(e) {
+
+e.preventDefault();
+
+const email =
+document.getElementById("email").value.trim();
+
+const password =
+document.getElementById("password").value;
+
+const confirmPassword =
+document.getElementById("confirmPassword").value;
+
+const message =
+document.getElementById("message");
+
+if (password !== confirmPassword) {
+
+message.innerHTML =
+`<div class="alert alert-error">
+Passwords do not match.
+</div>`;
+
+return;
+
+}
+
+const { error } =
+await db.auth.signUp({
+email,
+password
+});
+
+if (error) {
+
+message.innerHTML =
+`<div class="alert alert-error">
+${escapeHTML(error.message)}
+</div>`;
+
+return;
+
+}
+
+message.innerHTML =
+`<div class="alert alert-success">
+Account created successfully.
+Please check your email if email confirmation is enabled.
+</div>`;
+
+setTimeout(() => {
+
+window.location.href =
+"register.html";
+
+}, 1500);
+
+});
+
+</script>
+
+</body>
+</html>
