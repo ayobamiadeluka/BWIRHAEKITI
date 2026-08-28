@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Registration | BWI-RHA Ekiti State</title>
+<title>Member Registration | BWI-RHA Ekiti State</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -18,345 +18,685 @@
 
 <nav class="navbar">
 
-<div class="container nav-inner">
+    <div class="container nav-inner">
 
-<a href="index.html" class="logo">
-BWI-RHA <span>EKITI</span>
-</a>
+        <a href="index.html" class="logo">
+            BWI-RHA <span>EKITI</span>
+        </a>
 
-<button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <button
+            class="menu-btn"
+            onclick="toggleMenu()"
+            type="button"
+        >
+            ☰
+        </button>
 
-<div class="nav-links" id="navLinks">
+        <div class="nav-links" id="navLinks">
 
-<a href="index.html">Home</a>
-<a href="lga.html">LGAs</a>
-<a href="dashboard.html">Dashboard</a>
+            <a href="index.html">Home</a>
 
-</div>
+            <a href="lga.html">LGAs</a>
 
-</div>
+            <a href="register.html">Register</a>
+
+            <a href="dashboard.html">Dashboard</a>
+
+        </div>
+
+    </div>
 
 </nav>
 
+
+<section class="page-header">
+
+    <div class="container">
+
+        <h1>Member Registration</h1>
+
+        <p>
+            Register as a member of BWI-RHA Ekiti State Chapter.
+        </p>
+
+    </div>
+
+</section>
+
+
 <div class="container">
 
-<div class="form-wrapper">
+    <div class="form-wrapper">
 
-<h2>Member Registration</h2>
+        <h2>Registration Form</h2>
 
-<p>
-Complete your registration below.
-</p>
+        <p>
+            Please provide your correct information.
+        </p>
 
-<br>
+        <br>
 
-<div id="message"></div>
+        <div id="message"></div>
 
-<form id="registrationForm">
 
-<div class="form-group">
+        <form id="registrationForm">
 
-<label>Full Name</label>
 
-<input
-type="text"
-id="full_name"
-class="form-control"
-required
->
+            <!-- NAME -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    Full Name *
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    class="form-control"
+                    placeholder="Enter your full name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- PHONE -->
+
+            <div class="form-group">
+
+                <label for="phone_no">
+                    Phone Number *
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone_no"
+                    class="form-control"
+                    placeholder="08012345678"
+                    required
+                >
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address *
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    class="form-control"
+                    placeholder="example@email.com"
+                    required
+                >
+
+            </div>
+
+
+            <!-- BANK -->
+
+            <div class="form-group">
+
+                <label for="bank_name">
+                    Bank Name *
+                </label>
+
+                <input
+                    type="text"
+                    id="bank_name"
+                    class="form-control"
+                    placeholder="Enter your bank name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ACCOUNT -->
+
+            <div class="form-group">
+
+                <label for="account_no">
+                    Account Number *
+                </label>
+
+                <input
+                    type="text"
+                    id="account_no"
+                    class="form-control"
+                    placeholder="Enter your account number"
+                    inputmode="numeric"
+                    required
+                >
+
+            </div>
+
+
+            <!-- LGA -->
+
+            <div class="form-group">
+
+                <label for="lga">
+                    Local Government Area *
+                </label>
+
+                <select
+                    id="lga"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="">
+                        Loading LGAs...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- WARD -->
+
+            <div class="form-group">
+
+                <label for="ward">
+                    Ward *
+                </label>
+
+                <select
+                    id="ward"
+                    class="form-control"
+                    required
+                    disabled
+                >
+
+                    <option value="">
+                        Select LGA first
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="submitBtn"
+                class="btn btn-primary"
+            >
+
+                Submit Registration
+
+            </button>
+
+
+        </form>
+
+    </div>
 
 </div>
 
-<div class="form-group">
-
-<label>Phone Number</label>
-
-<input
-type="tel"
-id="phone"
-class="form-control"
-required
->
-
-</div>
-
-<div class="form-group">
-
-<label>LGA</label>
-
-<select
-id="lga"
-class="form-control"
-required
->
-
-<option value="">
-Loading LGAs...
-</option>
-
-</select>
-
-</div>
-
-<div class="form-group">
-
-<label>Ward</label>
-
-<select
-id="ward"
-class="form-control"
-required
-disabled
->
-
-<option value="">
-Select LGA first
-</option>
-
-</select>
-
-</div>
-
-<div class="form-group">
-
-<label>Address</label>
-
-<textarea
-id="address"
-class="form-control"
-required
-></textarea>
-
-</div>
-
-<button
-class="btn btn-primary"
-type="submit"
->
-
-Submit Registration
-
-</button>
-
-</form>
-
-</div>
-
-</div>
 
 <footer>
 
-<div class="container">
+    <div class="container">
 
-© 2026 BWI-RHA Ekiti State Chapter
+        © 2026 BWI-RHA Ekiti State Chapter
 
-</div>
+    </div>
 
 </footer>
 
+
 <script src="supabase.js"></script>
+
 
 <script>
 
+/* ============================
+   MOBILE MENU
+============================ */
+
 function toggleMenu() {
 
-document
-.getElementById("navLinks")
-.classList.toggle("open");
+    document
+        .getElementById("navLinks")
+        .classList
+        .toggle("open");
 
 }
 
-let lgaData = [];
+
+/* ============================
+   ELEMENTS
+============================ */
+
+const form =
+    document.getElementById("registrationForm");
+
+const lgaSelect =
+    document.getElementById("lga");
+
+const wardSelect =
+    document.getElementById("ward");
+
+const message =
+    document.getElementById("message");
+
+const submitBtn =
+    document.getElementById("submitBtn");
+
+
+/* ============================
+   LOAD LGAs
+============================ */
 
 async function loadLGAs() {
 
-const lgaSelect =
-document.getElementById("lga");
+    lgaSelect.innerHTML =
+        `<option value="">Loading LGAs...</option>`;
 
-const { data, error } =
-await db
-.from("lgas")
-.select("*")
-.order("name");
+    const {
+        data,
+        error
+    } = await db
+        .from("lgas")
+        .select("id, name")
+        .order("name", {
+            ascending: true
+        });
 
-if (error) {
 
-console.error(error);
+    if (error) {
 
-lgaSelect.innerHTML =
-`<option value="">
-Unable to load LGAs
-</option>`;
+        console.error(
+            "LGA ERROR:",
+            error
+        );
 
-return;
+        lgaSelect.innerHTML =
+            `<option value="">
+                Unable to load LGAs
+            </option>`;
+
+        message.innerHTML = `
+            <div class="alert alert-error">
+                Unable to load Local Government Areas.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    lgaSelect.innerHTML =
+        `<option value="">
+            Select Local Government
+        </option>`;
+
+
+    if (!data || data.length === 0) {
+
+        lgaSelect.innerHTML =
+            `<option value="">
+                No LGAs found
+            </option>`;
+
+        return;
+    }
+
+
+    data.forEach(lga => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = lga.id;
+
+        option.textContent = lga.name;
+
+        lgaSelect.appendChild(option);
+
+    });
 
 }
 
-lgaData = data || [];
 
-lgaSelect.innerHTML =
-`<option value="">
-Select LGA
-</option>`;
-
-lgaData.forEach(lga => {
-
-const option =
-document.createElement("option");
-
-option.value = lga.id;
-
-option.textContent = lga.name;
-
-lgaSelect.appendChild(option);
-
-});
-
-}
+/* ============================
+   LOAD WARDS
+============================ */
 
 async function loadWards(lgaId) {
 
-const wardSelect =
-document.getElementById("ward");
+    wardSelect.disabled = true;
 
-wardSelect.disabled = true;
+    wardSelect.innerHTML =
+        `<option value="">
+            Loading wards...
+        </option>`;
 
-wardSelect.innerHTML =
-`<option>
-Loading wards...
-</option>`;
 
-if (!lgaId) {
+    if (!lgaId) {
 
-wardSelect.innerHTML =
-`<option>
-Select LGA first
-</option>`;
+        wardSelect.innerHTML =
+            `<option value="">
+                Select LGA first
+            </option>`;
 
-return;
+        return;
+    }
 
-}
 
-const { data, error } =
-await db
-.from("wards")
-.select("*")
-.eq("lga_id", lgaId)
-.order("name");
+    const {
+        data,
+        error
+    } = await db
+        .from("wards")
+        .select("id, name")
+        .eq("lga_id", lgaId)
+        .order("name", {
+            ascending: true
+        });
 
-if (error) {
 
-console.error(error);
+    if (error) {
 
-wardSelect.innerHTML =
-`<option>
-Unable to load wards
-</option>`;
+        console.error(
+            "WARD ERROR:",
+            error
+        );
 
-return;
+        wardSelect.innerHTML =
+            `<option value="">
+                Unable to load wards
+            </option>`;
 
-}
+        return;
+    }
 
-wardSelect.innerHTML =
-`<option value="">
-Select Ward
-</option>`;
 
-(data || []).forEach(ward => {
+    wardSelect.innerHTML =
+        `<option value="">
+            Select Ward
+        </option>`;
 
-const option =
-document.createElement("option");
 
-option.value = ward.id;
+    if (!data || data.length === 0) {
 
-option.textContent = ward.name;
+        wardSelect.innerHTML =
+            `<option value="">
+                No wards found
+            </option>`;
 
-wardSelect.appendChild(option);
+        return;
+    }
 
-});
 
-wardSelect.disabled = false;
+    data.forEach(ward => {
 
-}
+        const option =
+            document.createElement("option");
 
-document
-.getElementById("lga")
-.addEventListener("change", function() {
+        option.value = ward.id;
 
-loadWards(this.value);
+        option.textContent = ward.name;
 
-});
+        wardSelect.appendChild(option);
 
-document
-.getElementById("registrationForm")
-.addEventListener("submit", async function(e) {
+    });
 
-e.preventDefault();
 
-const message =
-document.getElementById("message");
-
-const user =
-await requireLogin();
-
-if (!user) return;
-
-const payload = {
-
-user_id: user.id,
-
-full_name:
-document.getElementById("full_name").value.trim(),
-
-phone:
-document.getElementById("phone").value.trim(),
-
-lga_id:
-document.getElementById("lga").value,
-
-ward_id:
-document.getElementById("ward").value,
-
-address:
-document.getElementById("address").value.trim(),
-
-status: "pending"
-
-};
-
-const { error } =
-await db
-.from("members")
-.insert(payload);
-
-if (error) {
-
-console.error(error);
-
-message.innerHTML =
-`<div class="alert alert-error">
-${escapeHTML(error.message)}
-</div>`;
-
-return;
+    wardSelect.disabled = false;
 
 }
 
-message.innerHTML =
-`<div class="alert alert-success">
-Registration submitted successfully.
-Your registration is now pending approval.
-</div>`;
 
-this.reset();
+/* ============================
+   LGA CHANGE
+============================ */
 
-document.getElementById("ward").disabled = true;
+lgaSelect.addEventListener(
+    "change",
+    function() {
 
-});
+        loadWards(this.value);
+
+    }
+);
+
+
+/* ============================
+   SUBMIT
+============================ */
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        message.innerHTML = "";
+
+
+        /* CHECK LOGIN */
+
+        const user =
+            await getCurrentUser();
+
+
+        if (!user) {
+
+            message.innerHTML = `
+                <div class="alert alert-error">
+
+                    You must create an account
+                    and log in before registering.
+
+                    <br><br>
+
+                    <a
+                        href="login.html"
+                        style="color:#087f3f;font-weight:bold;"
+                    >
+                        Login here
+                    </a>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        /* GET VALUES */
+
+        const name =
+            document
+                .getElementById("name")
+                .value
+                .trim();
+
+
+        const phoneNo =
+            document
+                .getElementById("phone_no")
+                .value
+                .trim();
+
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim();
+
+
+        const bankName =
+            document
+                .getElementById("bank_name")
+                .value
+                .trim();
+
+
+        const accountNo =
+            document
+                .getElementById("account_no")
+                .value
+                .trim();
+
+
+        const lgaId =
+            lgaSelect.value;
+
+
+        const wardId =
+            wardSelect.value;
+
+
+        /* VALIDATION */
+
+        if (
+            !name ||
+            !phoneNo ||
+            !email ||
+            !bankName ||
+            !accountNo ||
+            !lgaId ||
+            !wardId
+        ) {
+
+            message.innerHTML = `
+                <div class="alert alert-error">
+                    Please complete all required fields.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        /* DISABLE BUTTON */
+
+        submitBtn.disabled = true;
+
+        submitBtn.textContent =
+            "Submitting...";
+
+
+        /* INSERT */
+
+        const {
+            error
+        } = await db
+            .from("members")
+            .insert({
+
+                user_id: user.id,
+
+                name: name,
+
+                phone_no: phoneNo,
+
+                email: email,
+
+                bank_name: bankName,
+
+                account_no: accountNo,
+
+                lga_id: lgaId,
+
+                ward_id: wardId,
+
+                status: "pending"
+
+            });
+
+
+        /* ERROR */
+
+        if (error) {
+
+            console.error(
+                "REGISTRATION ERROR:",
+                error
+            );
+
+
+            message.innerHTML = `
+                <div class="alert alert-error">
+
+                    Registration failed.
+
+                    <br>
+
+                    ${escapeHTML(error.message)}
+
+                </div>
+            `;
+
+
+            submitBtn.disabled = false;
+
+            submitBtn.textContent =
+                "Submit Registration";
+
+            return;
+        }
+
+
+        /* SUCCESS */
+
+        message.innerHTML = `
+            <div class="alert alert-success">
+
+                <strong>
+                    Registration submitted successfully!
+                </strong>
+
+                <br>
+
+                Your registration is currently
+                <strong>pending approval</strong>.
+
+            </div>
+        `;
+
+
+        form.reset();
+
+
+        wardSelect.disabled = true;
+
+        wardSelect.innerHTML =
+            `<option value="">
+                Select LGA first
+            </option>`;
+
+
+        submitBtn.disabled = false;
+
+        submitBtn.textContent =
+            "Submit Registration";
+
+    }
+);
+
+
+/* ============================
+   START
+============================ */
 
 loadLGAs();
 
 </script>
 
 </body>
+
 </html>
