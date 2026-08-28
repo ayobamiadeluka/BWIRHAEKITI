@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dashboard | BWI-RHA</title>
+<title>Dashboard | BWI-RHA Ekiti State</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -18,178 +18,561 @@
 
 <nav class="navbar">
 
-<div class="container nav-inner">
+    <div class="container nav-inner">
 
-<a href="index.html" class="logo">
-BWI-RHA <span>EKITI</span>
-</a>
+        <a href="index.html" class="logo">
+            BWI-RHA <span>EKITI</span>
+        </a>
 
-<button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <button
+            class="menu-btn"
+            onclick="toggleMenu()"
+            type="button"
+        >
+            ☰
+        </button>
 
-<div class="nav-links" id="navLinks">
+        <div class="nav-links" id="navLinks">
 
-<a href="index.html">Home</a>
-<a href="register.html">Registration</a>
-<a href="#" onclick="logout()">Logout</a>
+            <a href="index.html">Home</a>
 
-</div>
+            <a href="lga.html">LGAs</a>
 
-</div>
+            <a href="register.html">Register</a>
+
+            <a href="dashboard.html">Dashboard</a>
+
+            <a
+                href="#"
+                onclick="logout(); return false;"
+            >
+                Logout
+            </a>
+
+        </div>
+
+    </div>
 
 </nav>
 
+
 <section class="page-header">
 
-<div class="container">
+    <div class="container">
 
-<h1>Member Dashboard</h1>
+        <h1>Member Dashboard</h1>
 
-<p id="email"></p>
+        <p>
+            View your BWI-RHA registration information.
+        </p>
 
-</div>
-
-</section>
-
-<section class="section">
-
-<div class="container">
-
-<div id="content">
-
-Loading...
-
-</div>
-
-</div>
+    </div>
 
 </section>
+
+
+<main class="section">
+
+    <div class="container">
+
+        <div id="message"></div>
+
+        <div id="loading" class="loading">
+
+            Loading your information...
+
+        </div>
+
+
+        <div id="dashboard" style="display:none;">
+
+
+            <!-- STATUS -->
+
+            <div class="card" style="margin-bottom:25px;">
+
+                <h2>
+                    Registration Status
+                </h2>
+
+                <div
+                    id="status"
+                    style="margin-top:15px;"
+                ></div>
+
+            </div>
+
+
+            <!-- PERSONAL INFORMATION -->
+
+            <div class="card" style="margin-bottom:25px;">
+
+                <h2>
+                    Personal Information
+                </h2>
+
+                <br>
+
+                <div class="grid">
+
+                    <div>
+
+                        <strong>Name</strong>
+
+                        <p id="memberName">-</p>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>Phone</strong>
+
+                        <p id="memberPhone">-</p>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>Email</strong>
+
+                        <p id="memberEmail">-</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BANK INFORMATION -->
+
+            <div class="card" style="margin-bottom:25px;">
+
+                <h2>
+                    Bank Information
+                </h2>
+
+                <br>
+
+                <div class="grid">
+
+                    <div>
+
+                        <strong>Bank Name</strong>
+
+                        <p id="bankName">-</p>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>Account Number</strong>
+
+                        <p id="accountNumber">-</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div class="card">
+
+                <h2>
+                    Location
+                </h2>
+
+                <br>
+
+                <div class="grid">
+
+                    <div>
+
+                        <strong>Local Government</strong>
+
+                        <p id="lgaName">-</p>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>Ward</strong>
+
+                        <p id="wardName">-</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div
+                style="
+                    margin-top:25px;
+                    display:flex;
+                    gap:10px;
+                    flex-wrap:wrap;
+                "
+            >
+
+                <a
+                    href="register.html"
+                    class="btn btn-primary"
+                >
+                    Registration
+                </a>
+
+
+                <button
+                    type="button"
+                    onclick="logout()"
+                    class="btn btn-danger"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    <div class="container">
+
+        © 2026 BWI-RHA Ekiti State Chapter
+
+    </div>
+
+</footer>
+
 
 <script src="supabase.js"></script>
 
+
 <script>
+
+/* ============================
+   MOBILE MENU
+============================ */
 
 function toggleMenu() {
 
-document
-.getElementById("navLinks")
-.classList.toggle("open");
+    document
+        .getElementById("navLinks")
+        .classList
+        .toggle("open");
 
 }
 
-async function loadDashboard() {
 
-const user =
-await requireLogin();
+/* ============================
+   ELEMENTS
+============================ */
 
-if (!user) return;
+const loading =
+    document.getElementById("loading");
 
-document.getElementById("email")
-.textContent = user.email;
+const dashboard =
+    document.getElementById("dashboard");
 
-const { data, error } =
-await db
-.from("members")
-.select("*, lgas(name), wards(name)")
-.eq("user_id", user.id)
-.order("created_at", { ascending: false })
-.limit(1)
-.maybeSingle();
+const message =
+    document.getElementById("message");
 
-const content =
-document.getElementById("content");
 
-if (error) {
+/* ============================
+   STATUS
+============================ */
 
-content.innerHTML =
-`<div class="alert alert-error">
-${escapeHTML(error.message)}
-</div>`;
+function showStatus(status) {
 
-return;
+    const statusBox =
+        document.getElementById("status");
 
-}
 
-if (!data) {
+    if (status === "approved") {
 
-content.innerHTML = `
+        statusBox.innerHTML = `
+            <span class="badge badge-approved">
+                APPROVED
+            </span>
 
-<div class="card">
+            <p style="margin-top:10px;">
+                Your membership registration has
+                been approved.
+            </p>
+        `;
 
-<h2>
-Registration
-</h2>
+        return;
+    }
 
-<p>
-You have not submitted your membership registration yet.
-</p>
 
-<br>
+    if (status === "rejected") {
 
-<a
-href="register.html"
-class="btn btn-primary"
->
-Register Now
-</a>
+        statusBox.innerHTML = `
+            <span class="badge badge-rejected">
+                REJECTED
+            </span>
 
-</div>
+            <p style="margin-top:10px;">
+                Your registration was not approved.
+                Please contact the administrator.
+            </p>
+        `;
 
-`;
+        return;
+    }
 
-return;
 
-}
+    statusBox.innerHTML = `
+        <span class="badge badge-pending">
+            PENDING
+        </span>
 
-let badge =
-"badge-pending";
-
-if (data.status === "approved")
-badge = "badge-approved";
-
-if (data.status === "rejected")
-badge = "badge-rejected";
-
-content.innerHTML = `
-
-<div class="card">
-
-<h2>
-${escapeHTML(data.full_name)}
-</h2>
-
-<p>
-<strong>Phone:</strong>
-${escapeHTML(data.phone)}
-</p>
-
-<p>
-<strong>LGA:</strong>
-${escapeHTML(data.lgas?.name || "")}
-</p>
-
-<p>
-<strong>Ward:</strong>
-${escapeHTML(data.wards?.name || "")}
-</p>
-
-<p>
-<strong>Status:</strong>
-
-<span class="badge ${badge}">
-${escapeHTML(data.status)}
-</span>
-
-</p>
-
-</div>
-
-`;
+        <p style="margin-top:10px;">
+            Your registration is waiting for
+            administrator approval.
+        </p>
+    `;
 
 }
 
-loadDashboard();
+
+/* ============================
+   LOAD MEMBER
+============================ */
+
+async function loadMember() {
+
+    const user =
+        await getCurrentUser();
+
+
+    if (!user) {
+
+        window.location.href =
+            "login.html";
+
+        return;
+
+    }
+
+
+    const {
+        data,
+        error
+    } = await db
+        .from("members")
+        .select(`
+            id,
+            name,
+            phone_no,
+            email,
+            bank_name,
+            account_no,
+            status,
+            lga_id,
+            ward_id,
+            lgas (
+                name
+            ),
+            wards (
+                name
+            )
+        `)
+        .eq("user_id", user.id)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(1)
+        .maybeSingle();
+
+
+    if (error) {
+
+        console.error(
+            "DASHBOARD ERROR:",
+            error
+        );
+
+
+        loading.style.display =
+            "none";
+
+
+        message.innerHTML = `
+            <div class="alert alert-error">
+
+                Unable to load your registration.
+
+                <br><br>
+
+                ${escapeHTML(
+                    error.message
+                )}
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    if (!data) {
+
+        loading.style.display =
+            "none";
+
+
+        dashboard.style.display =
+            "block";
+
+
+        dashboard.innerHTML = `
+
+            <div class="card">
+
+                <h2>
+                    No Registration Found
+                </h2>
+
+                <p style="margin:15px 0;">
+
+                    You have not submitted
+                    a membership registration yet.
+
+                </p>
+
+                <a
+                    href="register.html"
+                    class="btn btn-primary"
+                >
+                    Register Now
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    /* PERSONAL */
+
+    document.getElementById(
+        "memberName"
+    ).textContent =
+        data.name || "-";
+
+
+    document.getElementById(
+        "memberPhone"
+    ).textContent =
+        data.phone_no || "-";
+
+
+    document.getElementById(
+        "memberEmail"
+    ).textContent =
+        data.email || user.email || "-";
+
+
+    /* BANK */
+
+    document.getElementById(
+        "bankName"
+    ).textContent =
+        data.bank_name || "-";
+
+
+    document.getElementById(
+        "accountNumber"
+    ).textContent =
+        data.account_no || "-";
+
+
+    /* LOCATION */
+
+    document.getElementById(
+        "lgaName"
+    ).textContent =
+        data.lgas?.name || "-";
+
+
+    document.getElementById(
+        "wardName"
+    ).textContent =
+        data.wards?.name || "-";
+
+
+    /* STATUS */
+
+    showStatus(data.status);
+
+
+    loading.style.display =
+        "none";
+
+
+    dashboard.style.display =
+        "block";
+
+}
+
+
+/* ============================
+   LOGOUT
+============================ */
+
+async function logout() {
+
+    const {
+        error
+    } = await db.auth.signOut();
+
+
+    if (error) {
+
+        console.error(
+            "LOGOUT ERROR:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* ============================
+   START
+============================ */
+
+loadMember();
 
 </script>
 
 </body>
+
 </html>
