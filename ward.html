@@ -11,7 +11,7 @@
     >
 
     <title>
-        Wards | BWI-RHA Ekiti State
+        Local Governments | BWI-RHA Ekiti State
     </title>
 
     <link
@@ -36,6 +36,7 @@
 <nav class="navbar">
 
     <div class="container nav-inner">
+
 
         <a
             href="index.html"
@@ -93,12 +94,13 @@
 
     <div class="container">
 
-        <h1 id="lgaName">
-            Loading...
+        <h1>
+            Local Government Areas
         </h1>
 
         <p>
-            Wards under this Local Government Area
+            Explore the Local Government Areas
+            of BWI-RHA Ekiti State Chapter.
         </p>
 
     </div>
@@ -108,7 +110,7 @@
 
 
 <!-- =====================================================
-     WARDS
+     LGA SECTION
 ===================================================== -->
 
 <section class="section">
@@ -126,12 +128,12 @@
             id="loading"
             class="loading"
         >
-            Loading wards...
+            Loading Local Government Areas...
         </div>
 
 
         <div
-            id="wardGrid"
+            id="lgaGrid"
             class="cards-grid"
         ></div>
 
@@ -165,7 +167,12 @@
 
 
 
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
 <script src="supabase.js"></script>
+
 
 
 <script>
@@ -220,32 +227,14 @@ document
 
 
 /* =====================================================
-   URL
-===================================================== */
-
-const params =
-    new URLSearchParams(
-        window.location.search
-    );
-
-
-const lgaId =
-    params.get("lga");
-
-
-
-/* =====================================================
    ELEMENTS
 ===================================================== */
-
-const lgaName =
-    document.getElementById("lgaName");
 
 const loading =
     document.getElementById("loading");
 
-const wardGrid =
-    document.getElementById("wardGrid");
+const lgaGrid =
+    document.getElementById("lgaGrid");
 
 const message =
     document.getElementById("message");
@@ -253,41 +242,16 @@ const message =
 
 
 /* =====================================================
-   LOAD LGA
+   LOAD LGAs
 ===================================================== */
 
-async function loadLGA() {
+async function loadLGAs() {
 
-    if (!lgaId) {
+    loading.style.display = "block";
 
-        lgaName.textContent =
-            "LGA Not Found";
+    lgaGrid.innerHTML = "";
 
-        loading.style.display =
-            "none";
-
-        message.innerHTML = `
-
-            <div class="alert alert-error">
-
-                No Local Government was selected.
-
-                <br><br>
-
-                <a
-                    href="lga.html"
-                    class="btn btn-primary"
-                >
-                    Back to LGAs
-                </a>
-
-            </div>
-
-        `;
-
-        return false;
-
-    }
+    message.innerHTML = "";
 
 
     const {
@@ -296,8 +260,12 @@ async function loadLGA() {
     } = await db
         .from("lgas")
         .select("id, name")
-        .eq("id", lgaId)
-        .maybeSingle();
+        .order("name", {
+            ascending: true
+        });
+
+
+    loading.style.display = "none";
 
 
     if (error) {
@@ -308,94 +276,11 @@ async function loadLGA() {
         );
 
 
-        loading.style.display =
-            "none";
-
-
         message.innerHTML = `
 
             <div class="alert alert-error">
 
-                Unable to load Local Government.
-
-                <br><br>
-
-                ${escapeHTML(
-                    error.message
-                )}
-
-            </div>
-
-        `;
-
-        return false;
-
-    }
-
-
-    if (!data) {
-
-        lgaName.textContent =
-            "LGA Not Found";
-
-        loading.style.display =
-            "none";
-
-        return false;
-
-    }
-
-
-    lgaName.textContent =
-        data.name;
-
-
-    return true;
-
-}
-
-
-
-/* =====================================================
-   LOAD WARDS
-===================================================== */
-
-async function loadWards() {
-
-    if (!lgaId) {
-        return;
-    }
-
-
-    const {
-        data,
-        error
-    } = await db
-        .from("wards")
-        .select("id, name")
-        .eq("lga_id", lgaId)
-        .order("name", {
-            ascending: true
-        });
-
-
-    loading.style.display =
-        "none";
-
-
-    if (error) {
-
-        console.error(
-            "WARD ERROR:",
-            error
-        );
-
-
-        message.innerHTML = `
-
-            <div class="alert alert-error">
-
-                Unable to load wards.
+                Unable to load Local Government Areas.
 
                 <br><br>
 
@@ -418,8 +303,8 @@ async function loadWards() {
 
             <div class="alert alert-error">
 
-                No wards were found
-                under this Local Government.
+                No Local Government Areas
+                were found.
 
             </div>
 
@@ -430,7 +315,69 @@ async function loadWards() {
     }
 
 
-    wardGrid.innerHTML = "";
+    data.forEach(function (lga) {
+
+        const card =
+            document.createElement("div");
 
 
-    data.for
+        card.className =
+            "card";
+
+
+        card.innerHTML = `
+
+            <h3>
+
+                ${escapeHTML(
+                    lga.name
+                )}
+
+            </h3>
+
+
+            <p>
+
+                Explore wards and members
+                under this Local Government.
+
+            </p>
+
+
+            <br>
+
+
+            <a
+                href="wards.html?lga=${encodeURIComponent(
+                    lga.id
+                )}"
+                class="btn btn-primary"
+            >
+
+                View Wards
+
+            </a>
+
+        `;
+
+
+        lgaGrid.appendChild(card);
+
+    });
+
+}
+
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadLGAs();
+
+</script>
+
+
+</body>
+
+</html>
