@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,7 +74,8 @@
                 Login
             </a>
 
-            <a href="admin.html">
+            <!-- ADMIN LOGIN -->
+            <a href="admin-login.html">
                 Admin
             </a>
 
@@ -113,6 +115,9 @@
 
             <div class="hero-buttons">
 
+
+                <!-- CREATE ACCOUNT -->
+
                 <a
                     href="create-account.html"
                     class="btn btn-primary"
@@ -120,6 +125,8 @@
                     Create Account
                 </a>
 
+
+                <!-- LGAs -->
 
                 <a
                     href="lga.html"
@@ -129,12 +136,15 @@
                 </a>
 
 
+                <!-- ADMIN LOGIN -->
+
                 <a
-                    href="admin.html"
+                    href="admin-login.html"
                     class="btn btn-secondary"
                 >
                     Admin
                 </a>
+
 
             </div>
 
@@ -154,6 +164,7 @@
 
     <div class="container">
 
+
         <div class="section-title">
 
             <h2>
@@ -169,10 +180,13 @@
         </div>
 
 
+
         <div class="cards-grid">
 
 
-            <!-- REGISTRATION -->
+            <!-- =========================================
+                 REGISTRATION
+            ========================================== -->
 
             <div class="card">
 
@@ -181,7 +195,7 @@
                 </h3>
 
                 <p>
-                    Create an account and register
+                    Create your account and register
                     as a member of BWI-RHA Ekiti
                     State Chapter.
                 </p>
@@ -199,7 +213,9 @@
 
 
 
-            <!-- LGAs -->
+            <!-- =========================================
+                 LGAs
+            ========================================== -->
 
             <div class="card">
 
@@ -226,7 +242,9 @@
 
 
 
-            <!-- LOGIN -->
+            <!-- =========================================
+                 MEMBER LOGIN
+            ========================================== -->
 
             <div class="card">
 
@@ -253,7 +271,9 @@
 
 
 
-            <!-- ADMIN -->
+            <!-- =========================================
+                 ADMIN
+            ========================================== -->
 
             <div class="card">
 
@@ -270,7 +290,7 @@
                 <br>
 
                 <a
-                    href="admin.html"
+                    href="admin-login.html"
                     class="btn btn-primary"
                 >
                     Admin Panel
@@ -295,6 +315,7 @@
 
     <div class="container">
 
+
         <div class="section-title">
 
             <h2>
@@ -307,6 +328,7 @@
             </p>
 
         </div>
+
 
 
         <div class="cards-grid">
@@ -326,6 +348,7 @@
             </div>
 
 
+
             <div class="card">
 
                 <h3>
@@ -338,6 +361,7 @@
                 </p>
 
             </div>
+
 
 
             <div class="card">
@@ -355,6 +379,7 @@
             </div>
 
 
+
             <div class="card">
 
                 <h3>
@@ -369,6 +394,47 @@
 
             </div>
 
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ADMIN CTA
+===================================================== -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="card">
+
+            <div class="section-title">
+
+                <h2>
+                    Administrator?
+                </h2>
+
+                <p>
+                    Access the secure administration
+                    area to manage members and
+                    organizational information.
+                </p>
+
+                <br>
+
+                <a
+                    href="admin-login.html"
+                    class="btn btn-primary"
+                >
+                    Admin Login
+                </a>
+
+            </div>
 
         </div>
 
@@ -455,41 +521,53 @@ const navLinks =
     document.getElementById("navLinks");
 
 
-menuBtn.addEventListener(
-    "click",
-    function () {
+if (menuBtn && navLinks) {
 
-        const isOpen =
-            navLinks.classList.toggle("open");
+    menuBtn.addEventListener(
+        "click",
+        function () {
 
-        menuBtn.setAttribute(
-            "aria-expanded",
-            isOpen ? "true" : "false"
-        );
-
-    }
-);
+            const isOpen =
+                navLinks.classList.toggle("open");
 
 
-document
-    .querySelectorAll("#navLinks a")
-    .forEach(function (link) {
+            menuBtn.setAttribute(
+                "aria-expanded",
+                isOpen
+                    ? "true"
+                    : "false"
+            );
 
-        link.addEventListener(
-            "click",
-            function () {
+        }
+    );
 
-                navLinks.classList.remove("open");
 
-                menuBtn.setAttribute(
-                    "aria-expanded",
-                    "false"
+    document
+        .querySelectorAll("#navLinks a")
+        .forEach(
+            function (link) {
+
+                link.addEventListener(
+                    "click",
+                    function () {
+
+                        navLinks.classList.remove(
+                            "open"
+                        );
+
+
+                        menuBtn.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+                    }
                 );
 
             }
         );
 
-    });
+}
 
 </script>
 
@@ -497,3 +575,4 @@ document
 </body>
 
 </html>
+```
