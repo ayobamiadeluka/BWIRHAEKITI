@@ -1,0 +1,760 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Admin Login | BWI-RHA Ekiti State
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-login-wrapper {
+            width: 100%;
+            max-width: 480px;
+            margin: 70px auto;
+            padding: 20px;
+        }
+
+        .admin-login-card {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 35px 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+        }
+
+        .admin-login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            background: #f1f8f4;
+        }
+
+        .admin-login-header h1 {
+            margin: 0 0 8px;
+        }
+
+        .admin-login-header p {
+            margin: 0;
+            opacity: 0.7;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: #198754;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper .form-control {
+            padding-right: 50px;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .login-btn {
+            width: 100%;
+            border: none;
+            padding: 14px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            padding: 12px 14px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .message.error {
+            display: block;
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .message.success {
+            display: block;
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            text-decoration: none;
+        }
+
+        .security-note {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 13px;
+            opacity: 0.65;
+        }
+
+        @media (max-width: 600px) {
+
+            .admin-login-wrapper {
+                margin: 35px auto;
+                padding: 15px;
+            }
+
+            .admin-login-card {
+                padding: 28px 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="container nav-inner">
+
+        <a
+            href="index.html"
+            class="logo"
+        >
+            BWI-RHA <span>EKITI</span>
+        </a>
+
+
+        <button
+            class="menu-btn"
+            id="menuBtn"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+        >
+            ☰
+        </button>
+
+
+        <div
+            class="nav-links"
+            id="navLinks"
+        >
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="lga.html">
+                LGAs
+            </a>
+
+            <a href="create-account.html">
+                Create Account
+            </a>
+
+            <a href="login.html">
+                Login
+            </a>
+
+            <a href="admin-login.html">
+                Admin
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     ADMIN LOGIN
+===================================================== -->
+
+<main class="admin-login-wrapper">
+
+    <div class="admin-login-card">
+
+
+        <div class="admin-login-header">
+
+            <div class="admin-icon">
+                🛡️
+            </div>
+
+            <h1>
+                Admin Login
+            </h1>
+
+            <p>
+                BWI-RHA Ekiti State Chapter
+            </p>
+
+        </div>
+
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+
+        <form id="adminLoginForm">
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Admin Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    class="form-control"
+                    placeholder="Enter admin email"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        class="form-control"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        id="showPassword"
+                        aria-label="Show password"
+                    >
+                        👁️
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <button
+                type="submit"
+                class="btn btn-primary login-btn"
+                id="loginBtn"
+            >
+                Login as Admin
+            </button>
+
+
+        </form>
+
+
+
+        <a
+            href="login.html"
+            class="back-link"
+        >
+            ← Member Login
+        </a>
+
+
+        <a
+            href="index.html"
+            class="back-link"
+        >
+            ← Back to Home
+        </a>
+
+
+
+        <div class="security-note">
+
+            🔒 Authorized administrators only.
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <div class="container">
+
+        <p>
+            © 2026 BWI-RHA Ekiti State Chapter
+        </p>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script src="supabase.js"></script>
+
+
+
+<script>
+
+/* =====================================================
+   CHECK SUPABASE
+===================================================== */
+
+if (
+    typeof db === "undefined" ||
+    !db
+) {
+
+    showMessage(
+        "Supabase configuration could not be loaded. Please check supabase.js.",
+        "error"
+    );
+
+}
+
+
+
+/* =====================================================
+   MOBILE MENU
+===================================================== */
+
+const menuBtn =
+    document.getElementById("menuBtn");
+
+const navLinks =
+    document.getElementById("navLinks");
+
+
+if (menuBtn && navLinks) {
+
+    menuBtn.addEventListener(
+        "click",
+        function () {
+
+            const open =
+                navLinks.classList.toggle(
+                    "open"
+                );
+
+            menuBtn.setAttribute(
+                "aria-expanded",
+                open ? "true" : "false"
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(
+    text,
+    type
+) {
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+    message.textContent =
+        text;
+
+    message.className =
+        "message " + type;
+
+}
+
+
+
+/* =====================================================
+   HIDE MESSAGE
+===================================================== */
+
+function hideMessage() {
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+    message.textContent =
+        "";
+
+    message.className =
+        "message";
+
+}
+
+
+
+/* =====================================================
+   SHOW / HIDE PASSWORD
+===================================================== */
+
+const showPassword =
+    document.getElementById(
+        "showPassword"
+    );
+
+const passwordInput =
+    document.getElementById(
+        "password"
+    );
+
+
+showPassword.addEventListener(
+    "click",
+    function () {
+
+        if (
+            passwordInput.type ===
+            "password"
+        ) {
+
+            passwordInput.type =
+                "text";
+
+            showPassword.textContent =
+                "🙈";
+
+        } else {
+
+            passwordInput.type =
+                "password";
+
+            showPassword.textContent =
+                "👁️";
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   ADMIN LOGIN
+===================================================== */
+
+const form =
+    document.getElementById(
+        "adminLoginForm"
+    );
+
+const loginBtn =
+    document.getElementById(
+        "loginBtn"
+    );
+
+
+form.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        hideMessage();
+
+
+        const email =
+            document.getElementById(
+                "email"
+            )
+            .value
+            .trim();
+
+
+        const password =
+            document.getElementById(
+                "password"
+            )
+            .value;
+
+
+        if (!email || !password) {
+
+            showMessage(
+                "Please enter your email and password.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        loginBtn.disabled =
+            true;
+
+        loginBtn.textContent =
+            "Signing in...";
+
+
+        try {
+
+
+            /* =========================================
+               SIGN IN WITH SUPABASE
+            ========================================== */
+
+            const {
+                data,
+                error
+            } = await db.auth.signInWithPassword({
+
+                email:
+                    email,
+
+                password:
+                    password
+
+            });
+
+
+            if (error) {
+
+                throw error;
+
+            }
+
+
+            if (!data ||
+                !data.user) {
+
+                throw new Error(
+                    "Login succeeded but no user session was returned."
+                );
+
+            }
+
+
+
+            /* =========================================
+               CHECK ADMIN TABLE
+            ========================================== */
+
+            const {
+                data: admin,
+                error: adminError
+            } = await db
+                .from("admins")
+                .select(
+                    "id,user_id,full_name,email,active"
+                )
+                .eq(
+                    "user_id",
+                    data.user.id
+                )
+                .maybeSingle();
+
+
+            if (adminError) {
+
+                await db.auth.signOut();
+
+                throw adminError;
+
+            }
+
+
+            if (!admin) {
+
+                await db.auth.signOut();
+
+                throw new Error(
+                    "This account is not registered as an administrator."
+                );
+
+            }
+
+
+            if (
+                admin.active === false
+            ) {
+
+                await db.auth.signOut();
+
+                throw new Error(
+                    "This administrator account is inactive."
+                );
+
+            }
+
+
+
+            /* =========================================
+               SUCCESS
+            ========================================== */
+
+            showMessage(
+                "Admin login successful. Opening dashboard...",
+                "success"
+            );
+
+
+            loginBtn.textContent =
+                "Opening Dashboard...";
+
+
+            setTimeout(
+                function () {
+
+                    window.location.href =
+                        "admin.html";
+
+                },
+                700
+            );
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "Admin login error:",
+                error
+            );
+
+
+            showMessage(
+                error.message ||
+                "Unable to log in.",
+                "error"
+            );
+
+
+            loginBtn.disabled =
+                false;
+
+            loginBtn.textContent =
+                "Login as Admin";
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
+```
