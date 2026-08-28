@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LGAs | BWI-RHA Ekiti</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<div class="container nav-inner">
+
+<a href="index.html" class="logo">
+BWI-RHA <span>EKITI</span>
+</a>
+
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+<div class="nav-links" id="navLinks">
+
+<a href="index.html">Home</a>
+<a href="lga.html">LGAs</a>
+<a href="register.html">Register</a>
+
+</div>
+
+</div>
+
+</nav>
+
+<section class="page-header">
+
+<div class="container">
+
+<h1>Ekiti State LGAs</h1>
+
+<p>
+Explore the 16 Local Government Areas.
+</p>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<div id="lgaGrid" class="grid">
+
+Loading...
+
+</div>
+
+</div>
+
+</section>
+
+<script src="supabase.js"></script>
+
+<script>
+
+function toggleMenu() {
+
+document
+.getElementById("navLinks")
+.classList.toggle("open");
+
+}
+
+async function loadLGAs() {
+
+const grid =
+document.getElementById("lgaGrid");
+
+const { data, error } =
+await db
+.from("lgas")
+.select("*")
+.order("name");
+
+if (error) {
+
+grid.innerHTML =
+`<div class="alert alert-error">
+${escapeHTML(error.message)}
+</div>`;
+
+return;
+
+}
+
+grid.innerHTML = "";
+
+(data || []).forEach(lga => {
+
+const card =
+document.createElement("div");
+
+card.className = "card";
+
+card.innerHTML = `
+
+<h3>
+${escapeHTML(lga.name)}
+</h3>
+
+<p>
+Explore wards and members.
+</p>
+
+<br>
+
+<a
+class="btn btn-primary"
+href="wards.html?lga=${encodeURIComponent(lga.id)}"
+>
+View Wards
+</a>
+
+`;
+
+grid.appendChild(card);
+
+});
+
+}
+
+loadLGAs();
+
+</script>
+
+</body>
+</html>
