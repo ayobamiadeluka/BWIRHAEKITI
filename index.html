@@ -2,34 +2,83 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>BWI-RHA Ekiti State</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <title>
+        BWI-RHA Ekiti State Chapter
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
 
+
 <body>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
 
 <nav class="navbar">
 
     <div class="container nav-inner">
 
-        <a href="index.html" class="logo">
+
+        <!-- LOGO -->
+
+        <a
+            href="index.html"
+            class="logo"
+        >
             BWI-RHA <span>EKITI</span>
         </a>
 
-        <button class="menu-btn" onclick="toggleMenu()">
+
+        <!-- MOBILE MENU BUTTON -->
+
+        <button
+            class="menu-btn"
+            id="menuBtn"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+        >
             ☰
         </button>
 
-        <div class="nav-links" id="navLinks">
 
-            <a href="index.html">Home</a>
-            <a href="lga.html">LGAs</a>
-            <a href="register.html">Register</a>
-            <a href="login.html">Login</a>
+        <!-- NAVIGATION LINKS -->
+
+        <div
+            class="nav-links"
+            id="navLinks"
+        >
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="lga.html">
+                LGAs
+            </a>
+
+            <a href="create-account.html">
+                Create Account
+            </a>
+
+            <a href="login.html">
+                Login
+            </a>
 
         </div>
 
@@ -37,32 +86,63 @@
 
 </nav>
 
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
 <section class="hero">
 
     <div class="container">
 
-        <h1>
-            BWI-RHA Ekiti State
-        </h1>
+        <div class="hero-content">
 
-        <p>
-            Business Women of Influence Renewed Hope Agenda
-            — Ekiti State Chapter.
-        </p>
+            <h1>
+                BWI-RHA Ekiti State Chapter
+            </h1>
 
-        <br>
+            <p>
+                Business Women of Influence
+                Renewed Hope Agenda
+            </p>
 
-        <a href="register.html" class="btn btn-secondary">
-            Register Now
-        </a>
+            <p>
+                Empowering women across every
+                Local Government and Ward in
+                Ekiti State.
+            </p>
 
-        <a href="lga.html" class="btn btn-gold">
-            Explore LGAs
-        </a>
+
+            <div class="hero-buttons">
+
+                <a
+                    href="create-account.html"
+                    class="btn btn-primary"
+                >
+                    Create Account
+                </a>
+
+                <a
+                    href="lga.html"
+                    class="btn btn-secondary"
+                >
+                    Explore LGAs
+                </a>
+
+            </div>
+
+        </div>
 
     </div>
 
 </section>
+
+
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
 
 <section class="section">
 
@@ -71,36 +151,231 @@
         <div class="section-title">
 
             <h2>
-                Our State Structure
+                Welcome to BWI-RHA Ekiti State
             </h2>
 
             <p>
-                Explore LGAs, wards, members and ward leadership.
+                Connecting women across Ekiti State
+                through organized Local Government
+                and Ward structures.
             </p>
 
         </div>
 
-        <div class="grid">
+
+        <div class="cards-grid">
+
+
+            <!-- CARD 1 -->
 
             <div class="card">
-                <h3>16 LGAs</h3>
+
+                <h3>
+                    Women Registration
+                </h3>
+
                 <p>
-                    Browse the complete Ekiti State local government structure.
+                    Create an account and register
+                    as a member of BWI-RHA Ekiti
+                    State Chapter.
                 </p>
+
+                <br>
+
+                <a
+                    href="create-account.html"
+                    class="btn btn-primary"
+                >
+                    Get Started
+                </a>
+
             </div>
 
-            <div class="card">
-                <h3>177 Wards</h3>
-                <p>
-                    Every ward is connected to its correct local government.
-                </p>
-            </div>
+
+
+            <!-- CARD 2 -->
 
             <div class="card">
-                <h3>Ward EXCOs</h3>
+
+                <h3>
+                    Local Governments
+                </h3>
+
                 <p>
-                    View ward leadership and office holders.
+                    Explore the Local Government
+                    Areas and view the wards under
+                    each LGA.
                 </p>
+
+                <br>
+
+                <a
+                    href="lga.html"
+                    class="btn btn-primary"
+                >
+                    View LGAs
+                </a>
+
+            </div>
+
+
+
+            <!-- CARD 3 -->
+
+            <div class="card">
+
+                <h3>
+                    Member Dashboard
+                </h3>
+
+                <p>
+                    Already registered? Login to
+                    view your membership information
+                    and registration status.
+                </p>
+
+                <br>
+
+                <a
+                    href="login.html"
+                    class="btn btn-primary"
+                >
+                    Login
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     HOW IT WORKS
+===================================================== -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>
+                How It Works
+            </h2>
+
+            <p>
+                Follow these simple steps to become
+                a registered member.
+            </p>
+
+        </div>
+
+
+        <div class="cards-grid">
+
+
+            <div class="card">
+
+                <h3>
+                    01. Create Account
+                </h3>
+
+                <p>
+                    Create your account using your
+                    email address and password.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    02. Login
+                </h3>
+
+                <p>
+                    Login to your account after
+                    completing account creation.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    03. Register
+                </h3>
+
+                <p>
+                    Complete your member information,
+                    select your LGA and Ward, and
+                    submit your registration.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    04. Approval
+                </h3>
+
+                <p>
+                    Your registration is reviewed
+                    by the administrator before
+                    approval.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CALL TO ACTION
+===================================================== -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="card">
+
+            <div class="section-title">
+
+                <h2>
+                    Ready to Join?
+                </h2>
+
+                <p>
+                    Create your account and begin
+                    your BWI-RHA Ekiti State
+                    membership registration.
+                </p>
+
+                <br>
+
+                <a
+                    href="create-account.html"
+                    class="btn btn-primary"
+                >
+                    Create Account
+                </a>
+
             </div>
 
         </div>
@@ -109,23 +384,88 @@
 
 </section>
 
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
 <footer>
+
     <div class="container">
-        © 2026 BWI-RHA Ekiti State Chapter
+
+        <p>
+            © 2026 BWI-RHA Ekiti State Chapter
+        </p>
+
+        <p>
+            Business Women of Influence -
+            Renewed Hope Agenda
+        </p>
+
     </div>
+
 </footer>
+
+
+
+<!-- =====================================================
+     MOBILE MENU SCRIPT
+===================================================== -->
 
 <script>
 
-function toggleMenu() {
+const menuBtn =
+    document.getElementById("menuBtn");
 
-    document
-        .getElementById("navLinks")
-        .classList.toggle("open");
+const navLinks =
+    document.getElementById("navLinks");
 
-}
+
+menuBtn.addEventListener(
+    "click",
+    function () {
+
+        const isOpen =
+            navLinks.classList.toggle("open");
+
+        menuBtn.setAttribute(
+            "aria-expanded",
+            isOpen ? "true" : "false"
+        );
+
+    }
+);
+
+
+/*
+    Close mobile menu when a link
+    is selected.
+*/
+
+document
+    .querySelectorAll("#navLinks a")
+    .forEach(function (link) {
+
+        link.addEventListener(
+            "click",
+            function () {
+
+                navLinks.classList.remove("open");
+
+                menuBtn.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+        );
+
+    });
 
 </script>
 
+
 </body>
+
 </html>
