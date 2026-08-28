@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Ward | BWI-RHA Ekiti</title>
+<title>Ward | BWI-RHA Ekiti State</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -16,294 +16,598 @@
 
 <body>
 
+
 <nav class="navbar">
 
-<div class="container nav-inner">
+    <div class="container nav-inner">
 
-<a href="index.html" class="logo">
-BWI-RHA <span>EKITI</span>
-</a>
+        <a href="index.html" class="logo">
+            BWI-RHA <span>EKITI</span>
+        </a>
 
-<button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <button
+            class="menu-btn"
+            onclick="toggleMenu()"
+            type="button"
+        >
+            ☰
+        </button>
 
-<div class="nav-links" id="navLinks">
+        <div class="nav-links" id="navLinks">
 
-<a href="index.html">Home</a>
-<a href="lga.html">LGAs</a>
+            <a href="index.html">Home</a>
 
-</div>
+            <a href="lga.html">LGAs</a>
 
-</div>
+        </div>
+
+    </div>
 
 </nav>
 
+
 <section class="page-header">
 
-<div class="container">
+    <div class="container">
 
-<h1 id="wardName">
-Loading...
-</h1>
+        <h1 id="wardName">
+            Loading...
+        </h1>
 
-<p id="lgaName">
-</p>
+        <p id="lgaName">
+            Loading Local Government...
+        </p>
 
-</div>
+    </div>
 
 </section>
+
+
+<!-- ============================
+     EXCO
+============================= -->
 
 <section class="section">
 
-<div class="container">
+    <div class="container">
 
-<div class="section-title">
+        <div class="section-title">
 
-<h2>
-Ward EXCO
-</h2>
+            <h2>
+                Ward EXCO
+            </h2>
 
-</div>
+            <p>
+                Ward leadership
+            </p>
 
-<div id="excoList">
+        </div>
 
-Loading EXCOs...
 
-</div>
+        <div id="excoList">
 
-</div>
+            <div class="loading">
+                Loading EXCOs...
+            </div>
+
+        </div>
+
+    </div>
 
 </section>
+
+
+<!-- ============================
+     MEMBERS
+============================= -->
 
 <section class="section">
 
-<div class="container">
+    <div class="container">
 
-<div class="section-title">
+        <div class="section-title">
 
-<h2>
-Approved Members
-</h2>
+            <h2>
+                Approved Members
+            </h2>
 
-</div>
+            <p>
+                Registered and approved members
+                of this ward.
+            </p>
 
-<div class="table-wrapper">
+        </div>
 
-<table>
 
-<thead>
+        <div class="table-wrapper">
 
-<tr>
+            <table>
 
-<th>Name</th>
-<th>Phone</th>
+                <thead>
 
-</tr>
+                    <tr>
 
-</thead>
+                        <th>
+                            Name
+                        </th>
 
-<tbody id="memberList">
+                        <th>
+                            Phone
+                        </th>
 
-<tr>
-<td colspan="2">
-Loading members...
-</td>
-</tr>
+                    </tr>
 
-</tbody>
+                </thead>
 
-</table>
 
-</div>
+                <tbody id="memberList">
 
-</div>
+                    <tr>
+
+                        <td colspan="2">
+
+                            Loading members...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
 </section>
+
+
+<footer>
+
+    <div class="container">
+
+        © 2026 BWI-RHA Ekiti State Chapter
+
+    </div>
+
+</footer>
+
 
 <script src="supabase.js"></script>
 
+
 <script>
+
+/* ============================
+   MENU
+============================ */
 
 function toggleMenu() {
 
-document
-.getElementById("navLinks")
-.classList.toggle("open");
+    document
+        .getElementById("navLinks")
+        .classList
+        .toggle("open");
 
 }
 
+
+/* ============================
+   GET WARD ID
+============================ */
+
 const params =
-new URLSearchParams(window.location.search);
+    new URLSearchParams(
+        window.location.search
+    );
 
 const wardId =
-params.get("ward");
+    params.get("ward");
+
+
+/* ============================
+   LOAD WARD
+============================ */
 
 async function loadWard() {
 
-if (!wardId) return;
+    const wardTitle =
+        document.getElementById(
+            "wardName"
+        );
 
-const { data: ward, error } =
-await db
-.from("wards")
-.select("*, lgas(*)")
-.eq("id", wardId)
-.maybeSingle();
+    const lgaTitle =
+        document.getElementById(
+            "lgaName"
+        );
 
-if (error || !ward) {
 
-document.getElementById("wardName")
-.textContent = "Ward not found";
+    if (!wardId) {
 
-return;
+        wardTitle.textContent =
+            "Ward Not Found";
 
-}
+        lgaTitle.textContent = "";
 
-document.getElementById("wardName")
-.textContent = ward.name;
+        return;
+    }
 
-if (ward.lgas) {
 
-document.getElementById("lgaName")
-.textContent = ward.lgas.name;
+    const {
+        data,
+        error
+    } = await db
+        .from("wards")
+        .select(`
+            id,
+            name,
+            lgas (
+                id,
+                name
+            )
+        `)
+        .eq("id", wardId)
+        .maybeSingle();
 
-}
 
-}
+    if (error) {
 
-async function loadMembers() {
+        console.error(
+            "WARD ERROR:",
+            error
+        );
 
-const tbody =
-document.getElementById("memberList");
+        wardTitle.textContent =
+            "Unable to load ward";
 
-const { data, error } =
-await db
-.from("members")
-.select("full_name,phone")
-.eq("ward_id", wardId)
-.eq("status", "approved")
-.order("full_name");
+        lgaTitle.textContent =
+            error.message;
 
-if (error) {
+        return;
+    }
 
-tbody.innerHTML =
-`<tr>
-<td colspan="2">
-${escapeHTML(error.message)}
-</td>
-</tr>`;
 
-return;
+    if (!data) {
 
-}
+        wardTitle.textContent =
+            "Ward Not Found";
 
-if (!data || !data.length) {
+        lgaTitle.textContent = "";
 
-tbody.innerHTML =
-`<tr>
-<td colspan="2">
-No approved members yet.
-</td>
-</tr>`;
+        return;
+    }
 
-return;
 
-}
+    wardTitle.textContent =
+        data.name;
 
-tbody.innerHTML = "";
 
-data.forEach(member => {
+    if (data.lgas) {
 
-const row =
-document.createElement("tr");
+        lgaTitle.textContent =
+            data.lgas.name;
 
-row.innerHTML = `
-
-<td>
-${escapeHTML(member.full_name)}
-</td>
-
-<td>
-${escapeHTML(member.phone)}
-</td>
-
-`;
-
-tbody.appendChild(row);
-
-});
+    }
 
 }
+
+
+/* ============================
+   LOAD EXCOS
+============================ */
 
 async function loadExcos() {
 
-const container =
-document.getElementById("excoList");
+    const container =
+        document.getElementById(
+            "excoList"
+        );
 
-const { data, error } =
-await db
-.from("excos")
-.select("*")
-.eq("ward_id", wardId)
-.order("office");
 
-if (error) {
+    if (!wardId) {
 
-container.innerHTML =
-`<div class="alert alert-error">
-${escapeHTML(error.message)}
-</div>`;
+        container.innerHTML = `
+            <div class="alert alert-error">
+                Ward not found.
+            </div>
+        `;
 
-return;
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } = await db
+        .from("excos")
+        .select(`
+            id,
+            position,
+            full_name,
+            phone_no,
+            photo_url
+        `)
+        .eq("ward_id", wardId)
+        .order("position");
+
+
+    if (error) {
+
+        console.error(
+            "EXCO ERROR:",
+            error
+        );
+
+        container.innerHTML = `
+            <div class="alert alert-error">
+
+                Unable to load EXCOs.
+
+                <br>
+
+                ${escapeHTML(
+                    error.message
+                )}
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        container.innerHTML = `
+            <div class="card">
+
+                <h3>
+                    No EXCO Assigned
+                </h3>
+
+                <p>
+                    No ward executive has
+                    been assigned yet.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    data.forEach(exco => {
+
+        const card =
+            document.createElement(
+                "div"
+            );
+
+
+        card.className =
+            "exco-card";
+
+
+        let photo = "";
+
+
+        if (exco.photo_url) {
+
+            photo = `
+
+                <img
+                    src="${escapeHTML(
+                        exco.photo_url
+                    )}"
+                    alt="${escapeHTML(
+                        exco.full_name
+                    )}"
+                    style="
+                        width:80px;
+                        height:80px;
+                        border-radius:50%;
+                        object-fit:cover;
+                        margin-bottom:10px;
+                    "
+                >
+
+            `;
+
+        }
+
+
+        card.innerHTML = `
+
+            ${photo}
+
+            <div class="exco-office">
+
+                ${escapeHTML(
+                    exco.position
+                )}
+
+            </div>
+
+            <div class="exco-person">
+
+                ${escapeHTML(
+                    exco.full_name ||
+                    "Not assigned"
+                )}
+
+            </div>
+
+            ${
+                exco.phone_no
+                ?
+                `
+                <div style="margin-top:5px;">
+
+                    ${escapeHTML(
+                        exco.phone_no
+                    )}
+
+                </div>
+                `
+                :
+                ""
+            }
+
+        `;
+
+
+        container.appendChild(card);
+
+    });
 
 }
 
-if (!data || !data.length) {
 
-container.innerHTML =
-`<div class="card">
-No EXCO has been assigned to this ward yet.
-</div>`;
+/* ============================
+   LOAD MEMBERS
+============================ */
 
-return;
+async function loadMembers() {
+
+    const tbody =
+        document.getElementById(
+            "memberList"
+        );
+
+
+    if (!wardId) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="2">
+                    Ward not found.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } = await db
+        .from("members")
+        .select(`
+            id,
+            name,
+            phone_no
+        `)
+        .eq("ward_id", wardId)
+        .eq("status", "approved")
+        .order("name");
+
+
+    if (error) {
+
+        console.error(
+            "MEMBER ERROR:",
+            error
+        );
+
+        tbody.innerHTML = `
+            <tr>
+
+                <td colspan="2">
+
+                    Unable to load members.
+
+                    <br>
+
+                    ${escapeHTML(
+                        error.message
+                    )}
+
+                </td>
+
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+
+                <td colspan="2">
+
+                    No approved members yet.
+
+                </td>
+
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    tbody.innerHTML = "";
+
+
+    data.forEach(member => {
+
+        const row =
+            document.createElement(
+                "tr"
+            );
+
+
+        row.innerHTML = `
+
+            <td>
+
+                ${escapeHTML(
+                    member.name
+                )}
+
+            </td>
+
+            <td>
+
+                ${escapeHTML(
+                    member.phone_no
+                )}
+
+            </td>
+
+        `;
+
+
+        tbody.appendChild(row);
+
+    });
 
 }
 
-container.innerHTML = "";
 
-data.forEach(exco => {
-
-const card =
-document.createElement("div");
-
-card.className =
-"exco-card";
-
-card.innerHTML = `
-
-<div class="exco-office">
-${escapeHTML(exco.office)}
-</div>
-
-<div class="exco-person">
-${escapeHTML(
-exco.full_name ||
-exco.name ||
-"No office holder assigned"
-)}
-</div>
-
-`;
-
-container.appendChild(card);
-
-});
-
-}
+/* ============================
+   START
+============================ */
 
 loadWard();
-loadMembers();
+
 loadExcos();
+
+loadMembers();
 
 </script>
 
 </body>
+
 </html>
