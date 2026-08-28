@@ -33,9 +33,6 @@
 
     <div class="container nav-inner">
 
-
-        <!-- LOGO -->
-
         <a
             href="index.html"
             class="logo"
@@ -43,8 +40,6 @@
             BWI-RHA <span>EKITI</span>
         </a>
 
-
-        <!-- MOBILE MENU BUTTON -->
 
         <button
             class="menu-btn"
@@ -56,8 +51,6 @@
             ☰
         </button>
 
-
-        <!-- NAVIGATION LINKS -->
 
         <div
             class="nav-links"
@@ -78,6 +71,10 @@
 
             <a href="login.html">
                 Login
+            </a>
+
+            <a href="admin.html">
+                Admin
             </a>
 
         </div>
@@ -123,11 +120,20 @@
                     Create Account
                 </a>
 
+
                 <a
                     href="lga.html"
                     class="btn btn-secondary"
                 >
                     Explore LGAs
+                </a>
+
+
+                <a
+                    href="admin.html"
+                    class="btn btn-secondary"
+                >
+                    Admin
                 </a>
 
             </div>
@@ -166,7 +172,7 @@
         <div class="cards-grid">
 
 
-            <!-- CARD 1 -->
+            <!-- REGISTRATION -->
 
             <div class="card">
 
@@ -193,7 +199,7 @@
 
 
 
-            <!-- CARD 2 -->
+            <!-- LGAs -->
 
             <div class="card">
 
@@ -220,7 +226,7 @@
 
 
 
-            <!-- CARD 3 -->
+            <!-- LOGIN -->
 
             <div class="card">
 
@@ -241,6 +247,33 @@
                     class="btn btn-primary"
                 >
                     Login
+                </a>
+
+            </div>
+
+
+
+            <!-- ADMIN -->
+
+            <div class="card">
+
+                <h3>
+                    Administration
+                </h3>
+
+                <p>
+                    Authorized administrators can
+                    manage registrations, EXCOs,
+                    wards and other site information.
+                </p>
+
+                <br>
+
+                <a
+                    href="admin.html"
+                    class="btn btn-primary"
+                >
+                    Admin Panel
                 </a>
 
             </div>
@@ -410,7 +443,7 @@
 
 
 <!-- =====================================================
-     MOBILE MENU SCRIPT
+     MOBILE MENU
 ===================================================== -->
 
 <script>
@@ -437,11 +470,6 @@ menuBtn.addEventListener(
     }
 );
 
-
-/*
-    Close mobile menu when a link
-    is selected.
-*/
 
 document
     .querySelectorAll("#navLinks a")
