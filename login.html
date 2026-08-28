@@ -2,132 +2,358 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Login | BWI-RHA</title>
+<title>Login | BWI-RHA Ekiti State</title>
 
 <link rel="stylesheet" href="style.css">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 </head>
 
 <body>
 
 <nav class="navbar">
 
-<div class="container nav-inner">
+    <div class="container nav-inner">
 
-<a href="index.html" class="logo">
-BWI-RHA <span>EKITI</span>
-</a>
+        <a href="index.html" class="logo">
+            BWI-RHA <span>EKITI</span>
+        </a>
 
-</div>
+        <button
+            class="menu-btn"
+            onclick="toggleMenu()"
+            type="button"
+        >
+            ☰
+        </button>
+
+        <div class="nav-links" id="navLinks">
+
+            <a href="index.html">Home</a>
+
+            <a href="lga.html">LGAs</a>
+
+            <a href="register.html">Register</a>
+
+            <a href="create-account.html">Create Account</a>
+
+        </div>
+
+    </div>
 
 </nav>
 
+
+<section class="page-header">
+
+    <div class="container">
+
+        <h1>Login</h1>
+
+        <p>Login to your BWI-RHA account.</p>
+
+    </div>
+
+</section>
+
+
 <div class="container">
 
-<div class="form-wrapper">
+    <div class="form-wrapper">
 
-<h2>Member Login</h2>
+        <h2>Member Login</h2>
 
-<br>
+        <p>Enter your account details below.</p>
 
-<div id="message"></div>
+        <br>
 
-<form id="loginForm">
+        <div id="message"></div>
 
-<div class="form-group">
 
-<label>Email</label>
+        <form id="loginForm">
 
-<input
-type="email"
-id="email"
-class="form-control"
-required
->
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address *
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    class="form-control"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password *
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    class="form-control"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="loginBtn"
+                class="btn btn-primary"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <p style="margin-top:20px;">
+
+            Don't have an account?
+
+            <a
+                href="create-account.html"
+                style="color:#087f3f;font-weight:bold;"
+            >
+                Create Account
+            </a>
+
+        </p>
+
+
+        <p style="margin-top:10px;">
+
+            <a
+                href="register.html"
+                style="color:#087f3f;font-weight:bold;"
+            >
+                Go to Member Registration
+            </a>
+
+        </p>
+
+    </div>
 
 </div>
 
-<div class="form-group">
 
-<label>Password</label>
+<footer>
 
-<input
-type="password"
-id="password"
-class="form-control"
-required
->
+    <div class="container">
 
-</div>
+        © 2026 BWI-RHA Ekiti State Chapter
 
-<button class="btn btn-primary" type="submit">
-Login
-</button>
+    </div>
 
-</form>
+</footer>
 
-<br>
-
-<p>
-No account?
-<a href="create-account.html"
-style="color:#087f3f;">
-Create one
-</a>
-</p>
-
-</div>
-
-</div>
 
 <script src="supabase.js"></script>
 
 <script>
 
-document
-.getElementById("loginForm")
-.addEventListener("submit", async function(e) {
+function toggleMenu() {
 
-e.preventDefault();
-
-const email =
-document.getElementById("email").value.trim();
-
-const password =
-document.getElementById("password").value;
-
-const message =
-document.getElementById("message");
-
-const { error } =
-await db.auth.signInWithPassword({
-email,
-password
-});
-
-if (error) {
-
-message.innerHTML =
-`<div class="alert alert-error">
-${escapeHTML(error.message)}
-</div>`;
-
-return;
+    document
+        .getElementById("navLinks")
+        .classList
+        .toggle("open");
 
 }
 
-window.location.href =
-"dashboard.html";
 
-});
+const form =
+    document.getElementById("loginForm");
+
+const message =
+    document.getElementById("message");
+
+const loginBtn =
+    document.getElementById("loginBtn");
+
+
+/* ============================
+   CHECK EXISTING SESSION
+============================ */
+
+async function checkSession() {
+
+    const user =
+        await getCurrentUser();
+
+    if (user) {
+
+        message.innerHTML = `
+            <div class="alert alert-success">
+
+                You are already logged in.
+
+                <br><br>
+
+                <a
+                    href="register.html"
+                    style="color:#087f3f;font-weight:bold;"
+                >
+                    Continue to Registration
+                </a>
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* ============================
+   LOGIN
+============================ */
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        message.innerHTML = "";
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim();
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        if (!email || !password) {
+
+            message.innerHTML = `
+                <div class="alert alert-error">
+                    Please enter your email and password.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        loginBtn.disabled = true;
+
+        loginBtn.textContent =
+            "Logging in...";
+
+
+        const {
+            data,
+            error
+        } = await db.auth.signInWithPassword({
+
+            email: email,
+
+            password: password
+
+        });
+
+
+        if (error) {
+
+            console.error(
+                "LOGIN ERROR:",
+                error
+            );
+
+            message.innerHTML = `
+                <div class="alert alert-error">
+
+                    ${escapeHTML(error.message)}
+
+                </div>
+            `;
+
+            loginBtn.disabled = false;
+
+            loginBtn.textContent =
+                "Login";
+
+            return;
+        }
+
+
+        if (!data.user) {
+
+            message.innerHTML = `
+                <div class="alert alert-error">
+
+                    Login failed. Please try again.
+
+                </div>
+            `;
+
+            loginBtn.disabled = false;
+
+            loginBtn.textContent =
+                "Login";
+
+            return;
+        }
+
+
+        message.innerHTML = `
+            <div class="alert alert-success">
+
+                Login successful!
+
+                <br>
+
+                Redirecting...
+
+            </div>
+        `;
+
+
+        /*
+           Send the member to registration.
+           The session is already stored by Supabase.
+        */
+
+        setTimeout(function() {
+
+            window.location.href =
+                "register.html";
+
+        }, 700);
+
+    }
+);
+
+
+/* ============================
+   START
+============================ */
+
+checkSession();
 
 </script>
 
 </body>
+
 </html>
