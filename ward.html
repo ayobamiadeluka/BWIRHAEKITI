@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ward | BWI-RHA Ekiti</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<div class="container nav-inner">
+
+<a href="index.html" class="logo">
+BWI-RHA <span>EKITI</span>
+</a>
+
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+<div class="nav-links" id="navLinks">
+
+<a href="index.html">Home</a>
+<a href="lga.html">LGAs</a>
+
+</div>
+
+</div>
+
+</nav>
+
+<section class="page-header">
+
+<div class="container">
+
+<h1 id="wardName">
+Loading...
+</h1>
+
+<p id="lgaName">
+</p>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>
+Ward EXCO
+</h2>
+
+</div>
+
+<div id="excoList">
+
+Loading EXCOs...
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>
+Approved Members
+</h2>
+
+</div>
+
+<div class="table-wrapper">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+<th>Phone</th>
+
+</tr>
+
+</thead>
+
+<tbody id="memberList">
+
+<tr>
+<td colspan="2">
+Loading members...
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+<script src="supabase.js"></script>
+
+<script>
+
+function toggleMenu() {
+
+document
+.getElementById("navLinks")
+.classList.toggle("open");
+
+}
+
+const params =
+new URLSearchParams(window.location.search);
+
+const wardId =
+params.get("ward");
+
+async function loadWard() {
+
+if (!wardId) return;
+
+const { data: ward, error } =
+await db
+.from("wards")
+.select("*, lgas(*)")
+.eq("id", wardId)
+.maybeSingle();
+
+if (error || !ward) {
+
+document.getElementById("wardName")
+.textContent = "Ward not found";
+
+return;
+
+}
+
+document.getElementById("wardName")
+.textContent = ward.name;
+
+if (ward.lgas) {
+
+document.getElementById("lgaName")
+.textContent = ward.lgas.name;
+
+}
+
+}
+
+async function loadMembers() {
+
+const tbody =
+document.getElementById("memberList");
+
+const { data, error } =
+await db
+.from("members")
+.select("full_name,phone")
+.eq("ward_id", wardId)
+.eq("status", "approved")
+.order("full_name");
+
+if (error) {
+
+tbody.innerHTML =
+`<tr>
+<td colspan="2">
+${escapeHTML(error.message)}
+</td>
+</tr>`;
+
+return;
+
+}
+
+if (!data || !data.length) {
+
+tbody.innerHTML =
+`<tr>
+<td colspan="2">
+No approved members yet.
+</td>
+</tr>`;
+
+return;
+
+}
+
+tbody.innerHTML = "";
+
+data.forEach(member => {
+
+const row =
+document.createElement("tr");
+
+row.innerHTML = `
+
+<td>
+${escapeHTML(member.full_name)}
+</td>
+
+<td>
+${escapeHTML(member.phone)}
+</td>
+
+`;
+
+tbody.appendChild(row);
+
+});
+
+}
+
+async function loadExcos() {
+
+const container =
+document.getElementById("excoList");
+
+const { data, error } =
+await db
+.from("excos")
+.select("*")
+.eq("ward_id", wardId)
+.order("office");
+
+if (error) {
+
+container.innerHTML =
+`<div class="alert alert-error">
+${escapeHTML(error.message)}
+</div>`;
+
+return;
+
+}
+
+if (!data || !data.length) {
+
+container.innerHTML =
+`<div class="card">
+No EXCO has been assigned to this ward yet.
+</div>`;
+
+return;
+
+}
+
+container.innerHTML = "";
+
+data.forEach(exco => {
+
+const card =
+document.createElement("div");
+
+card.className =
+"exco-card";
+
+card.innerHTML = `
+
+<div class="exco-office">
+${escapeHTML(exco.office)}
+</div>
+
+<div class="exco-person">
+${escapeHTML(
+exco.full_name ||
+exco.name ||
+"No office holder assigned"
+)}
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+loadWard();
+loadMembers();
+loadExcos();
+
+</script>
+
+</body>
+</html>
