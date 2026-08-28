@@ -3,41 +3,79 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Ward | BWI-RHA Ekiti State</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<link rel="stylesheet" href="style.css">
+    <title>
+        Wards | BWI-RHA Ekiti State
+    </title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
 
 </head>
 
+
 <body>
 
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
 
 <nav class="navbar">
 
     <div class="container nav-inner">
 
-        <a href="index.html" class="logo">
+        <a
+            href="index.html"
+            class="logo"
+        >
             BWI-RHA <span>EKITI</span>
         </a>
 
+
         <button
             class="menu-btn"
-            onclick="toggleMenu()"
+            id="menuBtn"
             type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
         >
             ☰
         </button>
 
-        <div class="nav-links" id="navLinks">
 
-            <a href="index.html">Home</a>
+        <div
+            class="nav-links"
+            id="navLinks"
+        >
 
-            <a href="lga.html">LGAs</a>
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="lga.html">
+                LGAs
+            </a>
+
+            <a href="create-account.html">
+                Create Account
+            </a>
+
+            <a href="login.html">
+                Login
+            </a>
 
         </div>
 
@@ -46,16 +84,21 @@
 </nav>
 
 
+
+<!-- =====================================================
+     PAGE HEADER
+===================================================== -->
+
 <section class="page-header">
 
     <div class="container">
 
-        <h1 id="wardName">
+        <h1 id="lgaName">
             Loading...
         </h1>
 
-        <p id="lgaName">
-            Loading Local Government...
+        <p>
+            Wards under this Local Government Area
         </p>
 
     </div>
@@ -63,115 +106,63 @@
 </section>
 
 
-<!-- ============================
-     EXCO
-============================= -->
+
+<!-- =====================================================
+     WARDS
+===================================================== -->
 
 <section class="section">
 
     <div class="container">
 
-        <div class="section-title">
 
-            <h2>
-                Ward EXCO
-            </h2>
+        <div
+            id="message"
+            style="margin-bottom:20px;"
+        ></div>
 
-            <p>
-                Ward leadership
-            </p>
 
+        <div
+            id="loading"
+            class="loading"
+        >
+            Loading wards...
         </div>
 
 
-        <div id="excoList">
+        <div
+            id="wardGrid"
+            class="cards-grid"
+        ></div>
 
-            <div class="loading">
-                Loading EXCOs...
-            </div>
-
-        </div>
 
     </div>
 
 </section>
 
 
-<!-- ============================
-     MEMBERS
-============================= -->
 
-<section class="section">
-
-    <div class="container">
-
-        <div class="section-title">
-
-            <h2>
-                Approved Members
-            </h2>
-
-            <p>
-                Registered and approved members
-                of this ward.
-            </p>
-
-        </div>
-
-
-        <div class="table-wrapper">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Name
-                        </th>
-
-                        <th>
-                            Phone
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody id="memberList">
-
-                    <tr>
-
-                        <td colspan="2">
-
-                            Loading members...
-
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</section>
-
+<!-- =====================================================
+     FOOTER
+===================================================== -->
 
 <footer>
 
     <div class="container">
 
-        © 2026 BWI-RHA Ekiti State Chapter
+        <p>
+            © 2026 BWI-RHA Ekiti State Chapter
+        </p>
+
+        <p>
+            Business Women of Influence -
+            Renewed Hope Agenda
+        </p>
 
     </div>
 
 </footer>
+
 
 
 <script src="supabase.js"></script>
@@ -179,57 +170,199 @@
 
 <script>
 
-/* ============================
-   MENU
-============================ */
+/* =====================================================
+   MOBILE MENU
+===================================================== */
 
-function toggleMenu() {
+const menuBtn =
+    document.getElementById("menuBtn");
 
-    document
-        .getElementById("navLinks")
-        .classList
-        .toggle("open");
-
-}
+const navLinks =
+    document.getElementById("navLinks");
 
 
-/* ============================
-   GET WARD ID
-============================ */
+menuBtn.addEventListener(
+    "click",
+    function () {
+
+        const isOpen =
+            navLinks.classList.toggle("open");
+
+        menuBtn.setAttribute(
+            "aria-expanded",
+            isOpen ? "true" : "false"
+        );
+
+    }
+);
+
+
+document
+    .querySelectorAll("#navLinks a")
+    .forEach(function (link) {
+
+        link.addEventListener(
+            "click",
+            function () {
+
+                navLinks.classList.remove("open");
+
+                menuBtn.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+        );
+
+    });
+
+
+
+/* =====================================================
+   URL
+===================================================== */
 
 const params =
     new URLSearchParams(
         window.location.search
     );
 
-const wardId =
-    params.get("ward");
+
+const lgaId =
+    params.get("lga");
 
 
-/* ============================
-   LOAD WARD
-============================ */
 
-async function loadWard() {
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
-    const wardTitle =
-        document.getElementById(
-            "wardName"
+const lgaName =
+    document.getElementById("lgaName");
+
+const loading =
+    document.getElementById("loading");
+
+const wardGrid =
+    document.getElementById("wardGrid");
+
+const message =
+    document.getElementById("message");
+
+
+
+/* =====================================================
+   LOAD LGA
+===================================================== */
+
+async function loadLGA() {
+
+    if (!lgaId) {
+
+        lgaName.textContent =
+            "LGA Not Found";
+
+        loading.style.display =
+            "none";
+
+        message.innerHTML = `
+
+            <div class="alert alert-error">
+
+                No Local Government was selected.
+
+                <br><br>
+
+                <a
+                    href="lga.html"
+                    class="btn btn-primary"
+                >
+                    Back to LGAs
+                </a>
+
+            </div>
+
+        `;
+
+        return false;
+
+    }
+
+
+    const {
+        data,
+        error
+    } = await db
+        .from("lgas")
+        .select("id, name")
+        .eq("id", lgaId)
+        .maybeSingle();
+
+
+    if (error) {
+
+        console.error(
+            "LGA ERROR:",
+            error
         );
 
-    const lgaTitle =
-        document.getElementById(
-            "lgaName"
-        );
+
+        loading.style.display =
+            "none";
 
 
-    if (!wardId) {
+        message.innerHTML = `
 
-        wardTitle.textContent =
-            "Ward Not Found";
+            <div class="alert alert-error">
 
-        lgaTitle.textContent = "";
+                Unable to load Local Government.
 
+                <br><br>
+
+                ${escapeHTML(
+                    error.message
+                )}
+
+            </div>
+
+        `;
+
+        return false;
+
+    }
+
+
+    if (!data) {
+
+        lgaName.textContent =
+            "LGA Not Found";
+
+        loading.style.display =
+            "none";
+
+        return false;
+
+    }
+
+
+    lgaName.textContent =
+        data.name;
+
+
+    return true;
+
+}
+
+
+
+/* =====================================================
+   LOAD WARDS
+===================================================== */
+
+async function loadWards() {
+
+    if (!lgaId) {
         return;
     }
 
@@ -239,16 +372,15 @@ async function loadWard() {
         error
     } = await db
         .from("wards")
-        .select(`
-            id,
-            name,
-            lgas (
-                id,
-                name
-            )
-        `)
-        .eq("id", wardId)
-        .maybeSingle();
+        .select("id, name")
+        .eq("lga_id", lgaId)
+        .order("name", {
+            ascending: true
+        });
+
+
+    loading.style.display =
+        "none";
 
 
     if (error) {
@@ -258,356 +390,47 @@ async function loadWard() {
             error
         );
 
-        wardTitle.textContent =
-            "Unable to load ward";
 
-        lgaTitle.textContent =
-            error.message;
+        message.innerHTML = `
 
-        return;
-    }
-
-
-    if (!data) {
-
-        wardTitle.textContent =
-            "Ward Not Found";
-
-        lgaTitle.textContent = "";
-
-        return;
-    }
-
-
-    wardTitle.textContent =
-        data.name;
-
-
-    if (data.lgas) {
-
-        lgaTitle.textContent =
-            data.lgas.name;
-
-    }
-
-}
-
-
-/* ============================
-   LOAD EXCOS
-============================ */
-
-async function loadExcos() {
-
-    const container =
-        document.getElementById(
-            "excoList"
-        );
-
-
-    if (!wardId) {
-
-        container.innerHTML = `
-            <div class="alert alert-error">
-                Ward not found.
-            </div>
-        `;
-
-        return;
-    }
-
-
-    const {
-        data,
-        error
-    } = await db
-        .from("excos")
-        .select(`
-            id,
-            position,
-            full_name,
-            phone_no,
-            photo_url
-        `)
-        .eq("ward_id", wardId)
-        .order("position");
-
-
-    if (error) {
-
-        console.error(
-            "EXCO ERROR:",
-            error
-        );
-
-        container.innerHTML = `
             <div class="alert alert-error">
 
-                Unable to load EXCOs.
+                Unable to load wards.
 
-                <br>
+                <br><br>
 
                 ${escapeHTML(
                     error.message
                 )}
 
             </div>
+
         `;
 
         return;
+
     }
 
 
     if (!data || data.length === 0) {
 
-        container.innerHTML = `
-            <div class="card">
+        message.innerHTML = `
 
-                <h3>
-                    No EXCO Assigned
-                </h3>
+            <div class="alert alert-error">
 
-                <p>
-                    No ward executive has
-                    been assigned yet.
-                </p>
-
-            </div>
-        `;
-
-        return;
-    }
-
-
-    container.innerHTML = "";
-
-
-    data.forEach(exco => {
-
-        const card =
-            document.createElement(
-                "div"
-            );
-
-
-        card.className =
-            "exco-card";
-
-
-        let photo = "";
-
-
-        if (exco.photo_url) {
-
-            photo = `
-
-                <img
-                    src="${escapeHTML(
-                        exco.photo_url
-                    )}"
-                    alt="${escapeHTML(
-                        exco.full_name
-                    )}"
-                    style="
-                        width:80px;
-                        height:80px;
-                        border-radius:50%;
-                        object-fit:cover;
-                        margin-bottom:10px;
-                    "
-                >
-
-            `;
-
-        }
-
-
-        card.innerHTML = `
-
-            ${photo}
-
-            <div class="exco-office">
-
-                ${escapeHTML(
-                    exco.position
-                )}
+                No wards were found
+                under this Local Government.
 
             </div>
 
-            <div class="exco-person">
-
-                ${escapeHTML(
-                    exco.full_name ||
-                    "Not assigned"
-                )}
-
-            </div>
-
-            ${
-                exco.phone_no
-                ?
-                `
-                <div style="margin-top:5px;">
-
-                    ${escapeHTML(
-                        exco.phone_no
-                    )}
-
-                </div>
-                `
-                :
-                ""
-            }
-
-        `;
-
-
-        container.appendChild(card);
-
-    });
-
-}
-
-
-/* ============================
-   LOAD MEMBERS
-============================ */
-
-async function loadMembers() {
-
-    const tbody =
-        document.getElementById(
-            "memberList"
-        );
-
-
-    if (!wardId) {
-
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="2">
-                    Ward not found.
-                </td>
-            </tr>
         `;
 
         return;
+
     }
 
 
-    const {
-        data,
-        error
-    } = await db
-        .from("members")
-        .select(`
-            id,
-            name,
-            phone_no
-        `)
-        .eq("ward_id", wardId)
-        .eq("status", "approved")
-        .order("name");
+    wardGrid.innerHTML = "";
 
 
-    if (error) {
-
-        console.error(
-            "MEMBER ERROR:",
-            error
-        );
-
-        tbody.innerHTML = `
-            <tr>
-
-                <td colspan="2">
-
-                    Unable to load members.
-
-                    <br>
-
-                    ${escapeHTML(
-                        error.message
-                    )}
-
-                </td>
-
-            </tr>
-        `;
-
-        return;
-    }
-
-
-    if (!data || data.length === 0) {
-
-        tbody.innerHTML = `
-            <tr>
-
-                <td colspan="2">
-
-                    No approved members yet.
-
-                </td>
-
-            </tr>
-        `;
-
-        return;
-    }
-
-
-    tbody.innerHTML = "";
-
-
-    data.forEach(member => {
-
-        const row =
-            document.createElement(
-                "tr"
-            );
-
-
-        row.innerHTML = `
-
-            <td>
-
-                ${escapeHTML(
-                    member.name
-                )}
-
-            </td>
-
-            <td>
-
-                ${escapeHTML(
-                    member.phone_no
-                )}
-
-            </td>
-
-        `;
-
-
-        tbody.appendChild(row);
-
-    });
-
-}
-
-
-/* ============================
-   START
-============================ */
-
-loadWard();
-
-loadExcos();
-
-loadMembers();
-
-</script>
-
-</body>
-
-</html>
+    data.for
