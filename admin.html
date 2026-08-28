@@ -2,7 +2,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Admin Panel | BWI-RHA Ekiti State</title>
@@ -10,6 +12,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -35,12 +38,6 @@ body{
     top:0;
     z-index:1000;
     box-shadow:0 3px 12px rgba(0,0,0,.15);
-}
-
-.header-left{
-    display:flex;
-    align-items:center;
-    gap:15px;
 }
 
 .header h1{
@@ -75,7 +72,6 @@ body{
     background:#103c27;
     color:white;
     padding:20px 12px;
-    flex-shrink:0;
 }
 
 .sidebar button{
@@ -403,16 +399,8 @@ tr:hover{
         font-size:17px;
     }
 
-    .header-left{
-        gap:8px;
-    }
-
     .stats{
         grid-template-columns:1fr 1fr;
-    }
-
-    .stat{
-        padding:15px;
     }
 
     .stat h3{
@@ -428,33 +416,26 @@ tr:hover{
     .toolbar .btn{
         width:100%;
     }
-
-    .logout{
-        padding:9px 12px;
-        font-size:12px;
-    }
 }
+
 </style>
 </head>
 
 <body>
 
-<!-- ================= HEADER ================= -->
-
 <header class="header">
 
-    <div class="header-left">
+    <div>
 
         <button class="mobile-menu" onclick="toggleSidebar()">
-            ☰
+            ☰ Menu
         </button>
 
-        <div>
-            <h1>BWI-RHA Ekiti State — Admin Panel</h1>
-            <small id="adminEmail">
-                Checking administrator...
-            </small>
-        </div>
+        <h1>BWI-RHA Ekiti State — Admin Panel</h1>
+
+        <small id="adminEmail">
+            Checking administrator...
+        </small>
 
     </div>
 
@@ -467,28 +448,45 @@ tr:hover{
 
 <div class="layout">
 
+
 <!-- ================= SIDEBAR ================= -->
 
 <aside class="sidebar" id="sidebar">
 
-    <button class="active"
-            onclick="showSection('dashboard',this)">
+    <button
+        class="active"
+        onclick="showSection('dashboard',this)"
+    >
         📊 Dashboard
     </button>
 
-    <button onclick="showSection('members',this)">
+    <button
+        onclick="showSection('members',this)"
+    >
         👩 Members
     </button>
 
-    <button onclick="showSection('excos',this)">
+    <button
+        onclick="showSection('excos',this)"
+    >
         👔 EXCO Management
     </button>
 
-    <button onclick="showSection('lgaExcos',this)">
+    <button
+        onclick="showSection('stateExcos',this)"
+    >
+        🏛️ State EXCO
+    </button>
+
+    <button
+        onclick="showSection('lgaExcos',this)"
+    >
         🏢 LGA EXCO
     </button>
 
-    <button onclick="showSection('wardExcos',this)">
+    <button
+        onclick="showSection('wardExcos',this)"
+    >
         📍 Ward EXCO
     </button>
 
@@ -497,11 +495,13 @@ tr:hover{
 
 <main class="main">
 
-<!-- =====================================================
-     DASHBOARD
-===================================================== -->
 
-<section id="dashboard" class="section active">
+<!-- ================= DASHBOARD ================= -->
+
+<section
+    id="dashboard"
+    class="section active"
+>
 
     <div class="section-title">
 
@@ -570,18 +570,21 @@ tr:hover{
     </div>
 
 
-    <div id="dashboardMessage"
-         class="message">
-    </div>
+    <div
+        id="dashboardMessage"
+        class="message"
+    ></div>
 
 </section>
 
 
-<!-- =====================================================
-     MEMBERS
-===================================================== -->
 
-<section id="members" class="section">
+<!-- ================= MEMBERS ================= -->
+
+<section
+    id="members"
+    class="section"
+>
 
     <div class="section-title">
 
@@ -640,9 +643,10 @@ tr:hover{
     </div>
 
 
-    <div id="memberMessage"
-         class="message">
-    </div>
+    <div
+        id="memberMessage"
+        class="message"
+    ></div>
 
 
     <div class="table-wrapper">
@@ -652,6 +656,7 @@ tr:hover{
             <thead>
 
                 <tr>
+
                     <th>Name</th>
                     <th>Phone</th>
                     <th>Email</th>
@@ -659,6 +664,7 @@ tr:hover{
                     <th>Ward</th>
                     <th>Status</th>
                     <th>Action</th>
+
                 </tr>
 
             </thead>
@@ -667,9 +673,11 @@ tr:hover{
             <tbody id="membersTable">
 
                 <tr>
+
                     <td colspan="7">
                         Loading members...
                     </td>
+
                 </tr>
 
             </tbody>
@@ -681,11 +689,13 @@ tr:hover{
 </section>
 
 
-<!-- =====================================================
-     EXCO MANAGEMENT
-===================================================== -->
 
-<section id="excos" class="section">
+<!-- ================= EXCO MANAGEMENT ================= -->
+
+<section
+    id="excos"
+    class="section"
+>
 
     <div class="section-title">
 
@@ -694,7 +704,7 @@ tr:hover{
         </h2>
 
         <p>
-            Manage State, LGA and Ward EXCOs.
+            Manage National, LGA and Ward EXCOs.
         </p>
 
     </div>
@@ -710,6 +720,8 @@ tr:hover{
         >
 
 
+        <!-- STATE REMOVED -->
+
         <select
             id="excoLevelFilter"
             onchange="filterExcos()"
@@ -719,8 +731,8 @@ tr:hover{
                 All Levels
             </option>
 
-            <option value="state">
-                State
+            <option value="national">
+                National
             </option>
 
             <option value="lga">
@@ -752,9 +764,10 @@ tr:hover{
     </div>
 
 
-    <div id="excoMessage"
-         class="message">
-    </div>
+    <div
+        id="excoMessage"
+        class="message"
+    ></div>
 
 
     <div class="table-wrapper">
@@ -764,6 +777,7 @@ tr:hover{
             <thead>
 
                 <tr>
+
                     <th>Level</th>
                     <th>LGA</th>
                     <th>Ward</th>
@@ -771,6 +785,7 @@ tr:hover{
                     <th>Name</th>
                     <th>Phone</th>
                     <th>Action</th>
+
                 </tr>
 
             </thead>
@@ -779,9 +794,11 @@ tr:hover{
             <tbody id="excosTable">
 
                 <tr>
+
                     <td colspan="7">
                         Loading EXCOs...
                     </td>
+
                 </tr>
 
             </tbody>
@@ -793,11 +810,91 @@ tr:hover{
 </section>
 
 
-<!-- =====================================================
-     LGA EXCO
-===================================================== -->
 
-<section id="lgaExcos" class="section">
+<!-- ================= STATE EXCO ================= -->
+
+<section
+    id="stateExcos"
+    class="section"
+>
+
+    <div class="section-title">
+
+        <h2>
+            State EXCO
+        </h2>
+
+        <p>
+            Manage Ekiti State-level officers.
+        </p>
+
+    </div>
+
+
+    <div class="toolbar">
+
+        <button
+            class="btn btn-primary"
+            onclick="setExcoLevel('state')"
+        >
+            ➕ Add State EXCO
+        </button>
+
+
+        <button
+            class="btn btn-secondary"
+            onclick="showSection('excos')"
+        >
+            View EXCO Management
+        </button>
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Position</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="stateExcosTable">
+
+                <tr>
+
+                    <td colspan="4">
+                        Loading...
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= LGA EXCO ================= -->
+
+<section
+    id="lgaExcos"
+    class="section"
+>
 
     <div class="section-title">
 
@@ -833,14 +930,6 @@ tr:hover{
             ➕ Add LGA EXCO
         </button>
 
-
-        <button
-            class="btn btn-secondary"
-            onclick="loadExcos()"
-        >
-            🔄 Refresh
-        </button>
-
     </div>
 
 
@@ -851,11 +940,13 @@ tr:hover{
             <thead>
 
                 <tr>
+
                     <th>LGA</th>
                     <th>Position</th>
                     <th>Name</th>
                     <th>Phone</th>
                     <th>Action</th>
+
                 </tr>
 
             </thead>
@@ -864,9 +955,11 @@ tr:hover{
             <tbody id="lgaExcosTable">
 
                 <tr>
+
                     <td colspan="5">
                         Loading...
                     </td>
+
                 </tr>
 
             </tbody>
@@ -878,11 +971,13 @@ tr:hover{
 </section>
 
 
-<!-- =====================================================
-     WARD EXCO
-===================================================== -->
 
-<section id="wardExcos" class="section">
+<!-- ================= WARD EXCO ================= -->
+
+<section
+    id="wardExcos"
+    class="section"
+>
 
     <div class="section-title">
 
@@ -930,14 +1025,6 @@ tr:hover{
             ➕ Add Ward EXCO
         </button>
 
-
-        <button
-            class="btn btn-secondary"
-            onclick="loadExcos()"
-        >
-            🔄 Refresh
-        </button>
-
     </div>
 
 
@@ -948,12 +1035,14 @@ tr:hover{
             <thead>
 
                 <tr>
+
                     <th>LGA</th>
                     <th>Ward</th>
                     <th>Position</th>
                     <th>Name</th>
                     <th>Phone</th>
                     <th>Action</th>
+
                 </tr>
 
             </thead>
@@ -962,9 +1051,11 @@ tr:hover{
             <tbody id="wardExcosTable">
 
                 <tr>
+
                     <td colspan="6">
                         Loading...
                     </td>
+
                 </tr>
 
             </tbody>
@@ -976,14 +1067,17 @@ tr:hover{
 </section>
 
 </main>
+
 </div>
 
 
-<!-- =====================================================
-     EXCO MODAL
-===================================================== -->
 
-<div class="modal" id="excoModal">
+<!-- ================= EXCO MODAL ================= -->
+
+<div
+    class="modal"
+    id="excoModal"
+>
 
 <div class="modal-box">
 
@@ -992,9 +1086,10 @@ tr:hover{
     </h2>
 
 
-    <div id="modalMessage"
-         class="message">
-    </div>
+    <div
+        id="modalMessage"
+        class="message"
+    ></div>
 
 
     <input
@@ -1015,6 +1110,10 @@ tr:hover{
             onchange="handleLevelChange()"
         >
 
+            <option value="national">
+                National
+            </option>
+
             <option value="state">
                 State
             </option>
@@ -1032,8 +1131,10 @@ tr:hover{
     </div>
 
 
-    <div class="form-group"
-         id="lgaGroup">
+    <div
+        class="form-group"
+        id="lgaGroup"
+    >
 
         <label>
             LGA
@@ -1054,17 +1155,17 @@ tr:hover{
     </div>
 
 
-    <div class="form-group"
-         id="wardGroup">
+    <div
+        class="form-group"
+        id="wardGroup"
+    >
 
         <label>
             Ward
         </label>
 
 
-        <select
-            id="excoWard"
-        >
+        <select id="excoWard">
 
             <option value="">
                 Select Ward
@@ -1085,7 +1186,7 @@ tr:hover{
         <input
             type="text"
             id="excoPosition"
-            placeholder="e.g. State Coordinator"
+            placeholder="e.g. Ward Coordinator"
         >
 
     </div>
@@ -1143,7 +1244,9 @@ tr:hover{
     </div>
 
 </div>
+
 </div>
+
 
 
 <script>
@@ -1170,9 +1273,15 @@ const supabaseClient =
 ===================================================== */
 
 let members = [];
+
 let excos = [];
+
 let lgas = [];
+
 let wards = [];
+
+let currentExcoLevel =
+    "national";
 
 
 /* =====================================================
@@ -1188,7 +1297,9 @@ document.addEventListener(
                 session
             }
         } =
-        await supabaseClient.auth.getSession();
+        await supabaseClient
+            .auth
+            .getSession();
 
 
         if(!session){
@@ -1197,6 +1308,7 @@ document.addEventListener(
                 "admin-login.html";
 
             return;
+
         }
 
 
@@ -1236,6 +1348,7 @@ async function verifyAdmin(userId){
         );
 
         return;
+
     }
 
 
@@ -1254,7 +1367,9 @@ async function verifyAdmin(userId){
         window.location.href =
             "admin-login.html";
 
+
         return;
+
     }
 
 
@@ -1271,16 +1386,21 @@ async function verifyAdmin(userId){
 
 
 /* =====================================================
-   INITIALIZE ADMIN
+   INITIALIZE
 ===================================================== */
 
 async function initializeAdmin(){
 
     await Promise.all([
+
         loadLGAs(),
+
         loadWards(),
+
         loadMembers(),
+
         loadExcos()
+
     ]);
 
 
@@ -1315,6 +1435,7 @@ async function loadLGAs(){
         );
 
         return;
+
     }
 
 
@@ -1351,6 +1472,7 @@ async function loadWards(){
         );
 
         return;
+
     }
 
 
@@ -1367,9 +1489,13 @@ async function loadWards(){
 function populateLgaSelects(){
 
     const selects = [
+
         "excoLga",
+
         "lgaExcoFilter",
+
         "wardLgaFilter"
+
     ];
 
 
@@ -1379,24 +1505,18 @@ function populateLgaSelects(){
             document.getElementById(id);
 
 
-        if(!select) return;
+        if(!select)
+            return;
 
 
-        let firstText =
+        const first =
+            select.options[0]?.textContent ||
             "Select LGA";
-
-
-        if(id === "lgaExcoFilter" ||
-           id === "wardLgaFilter"){
-
-            firstText =
-                "All LGAs";
-        }
 
 
         select.innerHTML =
             `<option value="">
-                ${firstText}
+                ${first}
             </option>`;
 
 
@@ -1428,7 +1548,7 @@ function populateLgaSelects(){
 
 
 /* =====================================================
-   LOAD WARD OPTIONS
+   WARD OPTIONS
 ===================================================== */
 
 function loadWardOptions(){
@@ -1454,7 +1574,7 @@ function loadWardOptions(){
     wards
         .filter(w =>
             !lgaId ||
-            String(w.lga_id) === String(lgaId)
+            w.lga_id === lgaId
         )
         .forEach(w => {
 
@@ -1485,7 +1605,7 @@ function loadWardOptions(){
 
 
 /* =====================================================
-   LOAD MODAL WARDS
+   MODAL WARDS
 ===================================================== */
 
 function loadModalWards(){
@@ -1510,7 +1630,8 @@ function loadModalWards(){
 
     wards
         .filter(w =>
-            String(w.lga_id) === String(lgaId)
+            String(w.lga_id) ===
+            String(lgaId)
         )
         .forEach(w => {
 
@@ -1576,6 +1697,7 @@ async function loadMembers(){
 
 
         return;
+
     }
 
 
@@ -1600,14 +1722,17 @@ function renderMembers(){
         (
             document.getElementById(
                 "memberSearch"
-            )?.value || ""
-        ).toLowerCase();
+            )?.value ||
+            ""
+        )
+        .toLowerCase();
 
 
     const status =
         document.getElementById(
             "memberStatusFilter"
-        )?.value || "";
+        )?.value ||
+        "";
 
 
     const filtered =
@@ -1618,7 +1743,8 @@ function renderMembers(){
                     m.full_name ||
                     m.name ||
                     ""
-                ).toLowerCase();
+                )
+                .toLowerCase();
 
 
             const phone =
@@ -1626,14 +1752,16 @@ function renderMembers(){
                     m.phone ||
                     m.phone_no ||
                     ""
-                ).toLowerCase();
+                )
+                .toLowerCase();
 
 
             const email =
                 String(
                     m.email ||
                     ""
-                ).toLowerCase();
+                )
+                .toLowerCase();
 
 
             const matchesSearch =
@@ -1672,6 +1800,7 @@ function renderMembers(){
             </tr>`;
 
         return;
+
     }
 
 
@@ -1684,14 +1813,6 @@ function renderMembers(){
                     : m.status === "rejected"
                         ? "badge-rejected"
                         : "badge-pending";
-
-
-            const lga =
-                m.lgas?.name || "-";
-
-
-            const ward =
-                m.wards?.name || "-";
 
 
             return `
@@ -1721,11 +1842,17 @@ function renderMembers(){
                 </td>
 
                 <td>
-                    ${escapeHTML(lga)}
+                    ${escapeHTML(
+                        m.lgas?.name ||
+                        "-"
+                    )}
                 </td>
 
                 <td>
-                    ${escapeHTML(ward)}
+                    ${escapeHTML(
+                        m.wards?.name ||
+                        "-"
+                    )}
                 </td>
 
                 <td>
@@ -1758,7 +1885,6 @@ function renderMembers(){
                             ""
                         }
 
-
                         ${
                             m.status !== "rejected"
                             ?
@@ -1779,7 +1905,8 @@ function renderMembers(){
             </tr>
             `;
 
-        }).join("");
+        })
+        .join("");
 
 }
 
@@ -1796,7 +1923,7 @@ function filterMembers(){
 
 
 /* =====================================================
-   UPDATE MEMBER STATUS
+   UPDATE MEMBER
 ===================================================== */
 
 async function updateMemberStatus(
@@ -1812,7 +1939,10 @@ async function updateMemberStatus(
         .update({
             status:status
         })
-        .eq("id",id);
+        .eq(
+            "id",
+            id
+        );
 
 
     if(error){
@@ -1824,6 +1954,7 @@ async function updateMemberStatus(
         );
 
         return;
+
     }
 
 
@@ -1856,12 +1987,8 @@ async function loadExcos(){
             lgas(name),
             wards(name)
         `)
-        .order(
-            "level"
-        )
-        .order(
-            "position"
-        );
+        .order("level")
+        .order("position");
 
 
     if(error){
@@ -1878,20 +2005,12 @@ async function loadExcos(){
 
 
         return;
+
     }
 
 
-    /*
-       IMPORTANT:
-       National EXCO is deliberately excluded
-       from the Admin Panel.
-    */
-
     excos =
-        (data || [])
-        .filter(
-            e => e.level !== "national"
-        );
+        data || [];
 
 
     renderExcos();
@@ -1904,7 +2023,7 @@ async function loadExcos(){
 
 
 /* =====================================================
-   RENDER EXCOS
+   RENDER MAIN EXCOS
 ===================================================== */
 
 function renderExcos(){
@@ -1913,25 +2032,49 @@ function renderExcos(){
         (
             document.getElementById(
                 "excoSearch"
-            )?.value || ""
-        ).toLowerCase();
+            )?.value ||
+            ""
+        )
+        .toLowerCase();
 
 
     const level =
         document.getElementById(
             "excoLevelFilter"
-        )?.value || "";
+        )?.value ||
+        "";
 
 
     const filtered =
         excos.filter(e => {
 
+            /*
+             * IMPORTANT:
+             * STATE EXCOS ARE HIDDEN
+             * FROM MAIN EXCO MANAGEMENT.
+             */
+
+            if(
+                e.level === "state"
+            ){
+
+                return false;
+
+            }
+
+
             const text = [
 
+                e.level,
+
                 e.position,
+
                 e.full_name,
+
                 e.phone_no,
+
                 e.lgas?.name,
+
                 e.wards?.name
 
             ]
@@ -1940,11 +2083,15 @@ function renderExcos(){
 
 
             return (
+
                 (!search ||
                     text.includes(search))
+
                 &&
+
                 (!level ||
                     e.level === level)
+
             );
 
         });
@@ -1960,12 +2107,15 @@ function renderExcos(){
 
         tbody.innerHTML =
             `<tr>
+
                 <td colspan="7">
                     No EXCO records found.
                 </td>
+
             </tr>`;
 
         return;
+
     }
 
 
@@ -1977,25 +2127,29 @@ function renderExcos(){
 
                 <td>
                     ${escapeHTML(
-                        e.level || "-"
+                        e.level ||
+                        "-"
                     )}
                 </td>
 
                 <td>
                     ${escapeHTML(
-                        e.lgas?.name || "-"
+                        e.lgas?.name ||
+                        "-"
                     )}
                 </td>
 
                 <td>
                     ${escapeHTML(
-                        e.wards?.name || "-"
+                        e.wards?.name ||
+                        "-"
                     )}
                 </td>
 
                 <td>
                     ${escapeHTML(
-                        e.position || "-"
+                        e.position ||
+                        "-"
                     )}
                 </td>
 
@@ -2008,7 +2162,8 @@ function renderExcos(){
 
                 <td>
                     ${escapeHTML(
-                        e.phone_no || "-"
+                        e.phone_no ||
+                        "-"
                     )}
                 </td>
 
@@ -2038,7 +2193,8 @@ function renderExcos(){
             </tr>
             `;
 
-        }).join("");
+        })
+        .join("");
 
 }
 
@@ -2064,13 +2220,67 @@ function loadLevelTables(){
 
     const state =
         excos.filter(
-            e => e.level === "state"
+            e =>
+                e.level === "state"
         );
 
 
-    document.getElementById(
-        "stateExcosTable"
-    )?.remove();
+    const stateTable =
+        document.getElementById(
+            "stateExcosTable"
+        );
+
+
+    stateTable.innerHTML =
+        state.length
+
+        ?
+
+        state.map(e => `
+
+            <tr>
+
+                <td>
+                    ${escapeHTML(
+                        e.position ||
+                        "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.full_name ||
+                        "To Be Assigned"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.phone_no ||
+                        "-"
+                    )}
+                </td>
+
+                <td>
+                    ${actionButtons(
+                        e.id
+                    )}
+                </td>
+
+            </tr>
+
+        `)
+        .join("")
+
+        :
+
+        `<tr>
+
+            <td colspan="4">
+                No State EXCO records.
+            </td>
+
+        </tr>`;
 
 
     /* ================= LGA ================= */
@@ -2078,16 +2288,23 @@ function loadLevelTables(){
     const lgaId =
         document.getElementById(
             "lgaExcoFilter"
-        )?.value || "";
+        )?.value ||
+        "";
 
 
     const lgaData =
         excos.filter(e =>
-            e.level === "lga" &&
+
+            e.level === "lga"
+
+            &&
+
             (
                 !lgaId ||
-                String(e.lga_id) === String(lgaId)
+                String(e.lga_id) ===
+                String(lgaId)
             )
+
         );
 
 
@@ -2097,53 +2314,63 @@ function loadLevelTables(){
         );
 
 
-    if(lgaTable){
+    lgaTable.innerHTML =
+        lgaData.length
 
-        lgaTable.innerHTML =
-            lgaData.length
-            ?
-            lgaData.map(e => `
-                <tr>
+        ?
 
-                    <td>
-                        ${escapeHTML(
-                            e.lgas?.name || "-"
-                        )}
-                    </td>
+        lgaData.map(e => `
 
-                    <td>
-                        ${escapeHTML(
-                            e.position || "-"
-                        )}
-                    </td>
+            <tr>
 
-                    <td>
-                        ${escapeHTML(
-                            e.full_name ||
-                            "To Be Assigned"
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            e.phone_no || "-"
-                        )}
-                    </td>
-
-                    <td>
-                        ${actionButtons(e.id)}
-                    </td>
-
-                </tr>
-            `).join("")
-            :
-            `<tr>
-                <td colspan="5">
-                    No LGA EXCO records.
+                <td>
+                    ${escapeHTML(
+                        e.lgas?.name ||
+                        "-"
+                    )}
                 </td>
-            </tr>`;
 
-    }
+                <td>
+                    ${escapeHTML(
+                        e.position ||
+                        "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.full_name ||
+                        "To Be Assigned"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.phone_no ||
+                        "-"
+                    )}
+                </td>
+
+                <td>
+                    ${actionButtons(
+                        e.id
+                    )}
+                </td>
+
+            </tr>
+
+        `)
+        .join("")
+
+        :
+
+        `<tr>
+
+            <td colspan="5">
+                No LGA EXCO records.
+            </td>
+
+        </tr>`;
 
 
     /* ================= WARD ================= */
@@ -2151,28 +2378,38 @@ function loadLevelTables(){
     const wardId =
         document.getElementById(
             "wardExcoFilter"
-        )?.value || "";
+        )?.value ||
+        "";
 
 
     const wardLgaId =
         document.getElementById(
             "wardLgaFilter"
-        )?.value || "";
+        )?.value ||
+        "";
 
 
     const wardData =
         excos.filter(e =>
-            e.level === "ward" &&
+
+            e.level === "ward"
+
+            &&
 
             (
                 !wardLgaId ||
-                String(e.lga_id) === String(wardLgaId)
-            ) &&
+                String(e.lga_id) ===
+                String(wardLgaId)
+            )
+
+            &&
 
             (
                 !wardId ||
-                String(e.ward_id) === String(wardId)
+                String(e.ward_id) ===
+                String(wardId)
             )
+
         );
 
 
@@ -2182,59 +2419,70 @@ function loadLevelTables(){
         );
 
 
-    if(wardTable){
+    wardTable.innerHTML =
+        wardData.length
 
-        wardTable.innerHTML =
-            wardData.length
-            ?
-            wardData.map(e => `
-                <tr>
+        ?
 
-                    <td>
-                        ${escapeHTML(
-                            e.lgas?.name || "-"
-                        )}
-                    </td>
+        wardData.map(e => `
 
-                    <td>
-                        ${escapeHTML(
-                            e.wards?.name || "-"
-                        )}
-                    </td>
+            <tr>
 
-                    <td>
-                        ${escapeHTML(
-                            e.position || "-"
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            e.full_name ||
-                            "To Be Assigned"
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            e.phone_no || "-"
-                        )}
-                    </td>
-
-                    <td>
-                        ${actionButtons(e.id)}
-                    </td>
-
-                </tr>
-            `).join("")
-            :
-            `<tr>
-                <td colspan="6">
-                    No Ward EXCO records.
+                <td>
+                    ${escapeHTML(
+                        e.lgas?.name ||
+                        "-"
+                    )}
                 </td>
-            </tr>`;
 
-    }
+                <td>
+                    ${escapeHTML(
+                        e.wards?.name ||
+                        "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.position ||
+                        "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.full_name ||
+                        "To Be Assigned"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.phone_no ||
+                        "-"
+                    )}
+                </td>
+
+                <td>
+                    ${actionButtons(
+                        e.id
+                    )}
+                </td>
+
+            </tr>
+
+        `)
+        .join("")
+
+        :
+
+        `<tr>
+
+            <td colspan="6">
+                No Ward EXCO records.
+            </td>
+
+        </tr>`;
 
 }
 
@@ -2255,7 +2503,6 @@ function actionButtons(id){
                 Edit
             </button>
 
-
             <button
                 style="background:#c62828"
                 onclick="deleteExco('${id}')"
@@ -2270,12 +2517,16 @@ function actionButtons(id){
 
 
 /* =====================================================
-   OPEN EXCO MODAL
+   OPEN MODAL
 ===================================================== */
 
 function openExcoModal(
-    level = "state"
+    level = "national"
 ){
+
+    currentExcoLevel =
+        level;
+
 
     document.getElementById(
         "modalTitle"
@@ -2285,7 +2536,8 @@ function openExcoModal(
 
     document.getElementById(
         "excoId"
-    ).value = "";
+    ).value =
+        "";
 
 
     document.getElementById(
@@ -2296,22 +2548,26 @@ function openExcoModal(
 
     document.getElementById(
         "excoPosition"
-    ).value = "";
+    ).value =
+        "";
 
 
     document.getElementById(
         "excoName"
-    ).value = "";
+    ).value =
+        "";
 
 
     document.getElementById(
         "excoPhone"
-    ).value = "";
+    ).value =
+        "";
 
 
     document.getElementById(
         "excoLga"
-    ).value = "";
+    ).value =
+        "";
 
 
     document.getElementById(
@@ -2333,24 +2589,10 @@ function openExcoModal(
 
 
 /* =====================================================
-   SET EXCO LEVEL
+   SET LEVEL
 ===================================================== */
 
 function setExcoLevel(level){
-
-    /*
-       Never allow national level.
-    */
-
-    if(
-        level !== "state" &&
-        level !== "lga" &&
-        level !== "ward"
-    ){
-
-        level = "state";
-    }
-
 
     openExcoModal(level);
 
@@ -2358,7 +2600,7 @@ function setExcoLevel(level){
 
 
 /* =====================================================
-   HANDLE LEVEL CHANGE
+   HANDLE LEVEL
 ===================================================== */
 
 function handleLevelChange(){
@@ -2390,6 +2632,7 @@ function handleLevelChange(){
             "none";
 
     }
+
     else if(level === "ward"){
 
         lgaGroup.style.display =
@@ -2399,6 +2642,7 @@ function handleLevelChange(){
             "block";
 
     }
+
     else{
 
         lgaGroup.style.display =
@@ -2420,7 +2664,9 @@ function closeExcoModal(){
 
     document.getElementById(
         "excoModal"
-    ).classList.remove("show");
+    )
+    .classList
+    .remove("show");
 
 }
 
@@ -2443,23 +2689,6 @@ async function saveExco(){
         ).value;
 
 
-    /*
-       Safety:
-       National EXCO cannot be created.
-    */
-
-    if(level === "national"){
-
-        showMessage(
-            "modalMessage",
-            "National EXCO is not managed from this panel.",
-            "error"
-        );
-
-        return;
-    }
-
-
     const lgaId =
         document.getElementById(
             "excoLga"
@@ -2477,19 +2706,22 @@ async function saveExco(){
     const position =
         document.getElementById(
             "excoPosition"
-        ).value.trim();
+        ).value
+        .trim();
 
 
     const fullName =
         document.getElementById(
             "excoName"
-        ).value.trim();
+        ).value
+        .trim();
 
 
     const phone =
         document.getElementById(
             "excoPhone"
-        ).value.trim();
+        ).value
+        .trim();
 
 
     if(!position){
@@ -2501,10 +2733,14 @@ async function saveExco(){
         );
 
         return;
+
     }
 
 
-    if(level === "lga" && !lgaId){
+    if(
+        level === "lga" &&
+        !lgaId
+    ){
 
         showMessage(
             "modalMessage",
@@ -2513,6 +2749,7 @@ async function saveExco(){
         );
 
         return;
+
     }
 
 
@@ -2528,6 +2765,7 @@ async function saveExco(){
         );
 
         return;
+
     }
 
 
@@ -2536,15 +2774,21 @@ async function saveExco(){
         level:level,
 
         lga_id:
-            level === "lga" ||
-            level === "ward"
-                ? lgaId
-                : null,
+            (
+                level === "lga" ||
+                level === "ward"
+            )
+            ?
+            lgaId
+            :
+            null,
 
         ward_id:
             level === "ward"
-                ? wardId
-                : null,
+            ?
+            wardId
+            :
+            null,
 
         position:position,
 
@@ -2568,15 +2812,21 @@ async function saveExco(){
             await supabaseClient
                 .from("excos")
                 .update(payload)
-                .eq("id",id);
+                .eq(
+                    "id",
+                    id
+                );
 
     }
+
     else{
 
         result =
             await supabaseClient
                 .from("excos")
-                .insert(payload);
+                .insert(
+                    payload
+                );
 
     }
 
@@ -2590,6 +2840,7 @@ async function saveExco(){
         );
 
         return;
+
     }
 
 
@@ -2616,17 +2867,13 @@ function editExco(id){
 
     const e =
         excos.find(
-            x => x.id === id
+            x =>
+                x.id === id
         );
 
 
-    if(!e) return;
-
-
-    if(e.level === "national"){
-
+    if(!e)
         return;
-    }
 
 
     document.getElementById(
@@ -2650,27 +2897,38 @@ function editExco(id){
     document.getElementById(
         "excoPosition"
     ).value =
-        e.position || "";
+        e.position ||
+        "";
 
 
     document.getElementById(
         "excoName"
     ).value =
-        e.full_name === "To Be Assigned"
-            ? ""
-            : e.full_name || "";
+        e.full_name ===
+        "To Be Assigned"
+
+        ?
+
+        ""
+
+        :
+
+        e.full_name ||
+        "";
 
 
     document.getElementById(
         "excoPhone"
     ).value =
-        e.phone_no || "";
+        e.phone_no ||
+        "";
 
 
     document.getElementById(
         "excoLga"
     ).value =
-        e.lga_id || "";
+        e.lga_id ||
+        "";
 
 
     loadModalWards();
@@ -2681,7 +2939,8 @@ function editExco(id){
         document.getElementById(
             "excoWard"
         ).value =
-            e.ward_id || "";
+            e.ward_id ||
+            "";
 
     },50);
 
@@ -2691,7 +2950,9 @@ function editExco(id){
 
     document.getElementById(
         "excoModal"
-    ).classList.add("show");
+    )
+    .classList
+    .add("show");
 
 }
 
@@ -2704,17 +2965,13 @@ async function deleteExco(id){
 
     const e =
         excos.find(
-            x => x.id === id
+            x =>
+                x.id === id
         );
 
 
-    if(!e) return;
-
-
-    if(e.level === "national"){
-
+    if(!e)
         return;
-    }
 
 
     const confirmed =
@@ -2723,7 +2980,8 @@ async function deleteExco(id){
         );
 
 
-    if(!confirmed) return;
+    if(!confirmed)
+        return;
 
 
     const {
@@ -2732,7 +2990,10 @@ async function deleteExco(id){
     await supabaseClient
         .from("excos")
         .delete()
-        .eq("id",id);
+        .eq(
+            "id",
+            id
+        );
 
 
     if(error){
@@ -2745,6 +3006,7 @@ async function deleteExco(id){
         );
 
         return;
+
     }
 
 
@@ -2776,7 +3038,9 @@ function updateDashboard(){
         "statPending"
     ).textContent =
         members.filter(
-            m => m.status === "pending"
+            m =>
+                m.status ===
+                "pending"
         ).length;
 
 
@@ -2784,7 +3048,9 @@ function updateDashboard(){
         "statApproved"
     ).textContent =
         members.filter(
-            m => m.status === "approved"
+            m =>
+                m.status ===
+                "approved"
         ).length;
 
 
@@ -2806,21 +3072,26 @@ function showSection(
 ){
 
     document
-        .querySelectorAll(".section")
-        .forEach(s =>
-            s.classList.remove("active")
+        .querySelectorAll(
+            ".section"
+        )
+        .forEach(
+            s =>
+                s.classList
+                    .remove("active")
         );
 
 
     const section =
-        document.getElementById(id);
+        document.getElementById(
+            id
+        );
 
 
     if(section){
 
-        section.classList.add(
-            "active"
-        );
+        section.classList
+            .add("active");
 
     }
 
@@ -2829,18 +3100,17 @@ function showSection(
         .querySelectorAll(
             ".sidebar button"
         )
-        .forEach(b =>
-            b.classList.remove(
-                "active"
-            )
+        .forEach(
+            b =>
+                b.classList
+                    .remove("active")
         );
 
 
     if(button){
 
-        button.classList.add(
-            "active"
-        );
+        button.classList
+            .add("active");
 
     }
 
@@ -2849,9 +3119,8 @@ function showSection(
         .getElementById(
             "sidebar"
         )
-        .classList.remove(
-            "open"
-        );
+        .classList
+        .remove("open");
 
 }
 
@@ -2866,9 +3135,8 @@ function toggleSidebar(){
         .getElementById(
             "sidebar"
         )
-        .classList.toggle(
-            "open"
-        );
+        .classList
+        .toggle("open");
 
 }
 
@@ -2901,10 +3169,13 @@ function showMessage(
 ){
 
     const el =
-        document.getElementById(id);
+        document.getElementById(
+            id
+        );
 
 
-    if(!el) return;
+    if(!el)
+        return;
 
 
     el.textContent =
@@ -2912,7 +3183,8 @@ function showMessage(
 
 
     el.className =
-        "message " + type;
+        "message " +
+        type;
 
 
     setTimeout(() => {
@@ -2971,7 +3243,8 @@ document
         function(e){
 
             if(
-                e.target === this
+                e.target ===
+                this
             ){
 
                 closeExcoModal();
