@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard | BWI-RHA</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<div class="container nav-inner">
+
+<a href="index.html" class="logo">
+BWI-RHA <span>EKITI</span>
+</a>
+
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+<div class="nav-links" id="navLinks">
+
+<a href="index.html">Home</a>
+<a href="register.html">Registration</a>
+<a href="#" onclick="logout()">Logout</a>
+
+</div>
+
+</div>
+
+</nav>
+
+<section class="page-header">
+
+<div class="container">
+
+<h1>Member Dashboard</h1>
+
+<p id="email"></p>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<div id="content">
+
+Loading...
+
+</div>
+
+</div>
+
+</section>
+
+<script src="supabase.js"></script>
+
+<script>
+
+function toggleMenu() {
+
+document
+.getElementById("navLinks")
+.classList.toggle("open");
+
+}
+
+async function loadDashboard() {
+
+const user =
+await requireLogin();
+
+if (!user) return;
+
+document.getElementById("email")
+.textContent = user.email;
+
+const { data, error } =
+await db
+.from("members")
+.select("*, lgas(name), wards(name)")
+.eq("user_id", user.id)
+.order("created_at", { ascending: false })
+.limit(1)
+.maybeSingle();
+
+const content =
+document.getElementById("content");
+
+if (error) {
+
+content.innerHTML =
+`<div class="alert alert-error">
+${escapeHTML(error.message)}
+</div>`;
+
+return;
+
+}
+
+if (!data) {
+
+content.innerHTML = `
+
+<div class="card">
+
+<h2>
+Registration
+</h2>
+
+<p>
+You have not submitted your membership registration yet.
+</p>
+
+<br>
+
+<a
+href="register.html"
+class="btn btn-primary"
+>
+Register Now
+</a>
+
+</div>
+
+`;
+
+return;
+
+}
+
+let badge =
+"badge-pending";
+
+if (data.status === "approved")
+badge = "badge-approved";
+
+if (data.status === "rejected")
+badge = "badge-rejected";
+
+content.innerHTML = `
+
+<div class="card">
+
+<h2>
+${escapeHTML(data.full_name)}
+</h2>
+
+<p>
+<strong>Phone:</strong>
+${escapeHTML(data.phone)}
+</p>
+
+<p>
+<strong>LGA:</strong>
+${escapeHTML(data.lgas?.name || "")}
+</p>
+
+<p>
+<strong>Ward:</strong>
+${escapeHTML(data.wards?.name || "")}
+</p>
+
+<p>
+<strong>Status:</strong>
+
+<span class="badge ${badge}">
+${escapeHTML(data.status)}
+</span>
+
+</p>
+
+</div>
+
+`;
+
+}
+
+loadDashboard();
+
+</script>
+
+</body>
+</html>
