@@ -7,17 +7,21 @@ const db = window.supabase.createClient(
 );
 
 async function getCurrentUser() {
-    const { data, error } = await db.auth.getUser();
+    const {
+        data: { user },
+        error
+    } = await db.auth.getUser();
 
     if (error) {
-        console.error(error);
+        console.error("Auth error:", error);
         return null;
     }
 
-    return data.user || null;
+    return user;
 }
 
 async function requireLogin() {
+
     const user = await getCurrentUser();
 
     if (!user) {
@@ -28,32 +32,19 @@ async function requireLogin() {
     return user;
 }
 
-async function isAdmin() {
-    const user = await getCurrentUser();
+async function logout() {
 
-    if (!user) return false;
-
-    const { data, error } = await db
-        .from("admins")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("active", true)
-        .maybeSingle();
+    const { error } = await db.auth.signOut();
 
     if (error) {
-        console.error("Admin check:", error);
-        return false;
+        console.error("Logout error:", error);
     }
 
-    return !!data;
-}
-
-async function logout() {
-    await db.auth.signOut();
     window.location.href = "index.html";
 }
 
 function escapeHTML(value) {
+
     return String(value ?? "")
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
