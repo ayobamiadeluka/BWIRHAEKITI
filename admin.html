@@ -1,689 +1,909 @@
 ```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Admin | BWI-RHA Ekiti State</title>
-
-<link rel="stylesheet" href="style.css">
+<title>Admin Panel | BWI-RHA Ekiti State</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-.admin-wrapper {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 20px 15px 60px;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-.admin-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f7f5;
+    color:#17221a;
 }
 
-.admin-grid {
-    display: grid;
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(200px, 1fr)
-    );
-    gap: 20px;
-    margin-bottom: 30px;
+/* ================= HEADER ================= */
+
+.header{
+    background:#087443;
+    color:white;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
 }
 
-.stat-card {
-    background: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+.header h1{
+    font-size:21px;
 }
 
-.stat-card h3 {
-    margin: 0 0 10px;
+.header small{
+    display:block;
+    margin-top:4px;
+    opacity:.85;
 }
 
-.stat-number {
-    font-size: 32px;
-    font-weight: bold;
+.logout{
+    background:#c62828;
+    border:0;
+    color:white;
+    padding:10px 16px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
 }
 
-.admin-section {
-    background: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,.08);
-    margin-bottom: 30px;
+/* ================= LAYOUT ================= */
+
+.layout{
+    display:flex;
+    min-height:calc(100vh - 75px);
 }
 
-.table-wrapper {
-    overflow-x: auto;
+.sidebar{
+    width:240px;
+    background:#103c27;
+    color:white;
+    padding:20px 12px;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 750px;
+.sidebar button{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:white;
+    padding:13px 14px;
+    margin-bottom:6px;
+    text-align:left;
+    border-radius:7px;
+    cursor:pointer;
+    font-size:14px;
 }
 
-th,
-td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
+.sidebar button:hover,
+.sidebar button.active{
+    background:#087443;
 }
 
-th {
-    font-weight: bold;
+.main{
+    flex:1;
+    padding:25px;
+    max-width:1500px;
+    margin:auto;
+    width:100%;
 }
 
-.form-grid {
-    display: grid;
-    grid-template-columns:
-        repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
+/* ================= SECTIONS ================= */
+
+.section{
+    display:none;
 }
 
-.form-group label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 6px;
+.section.active{
+    display:block;
 }
 
-.form-control {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 11px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+.section-title{
+    margin-bottom:20px;
 }
 
-.status {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
+.section-title h2{
+    font-size:25px;
+    color:#087443;
 }
 
-.pending {
-    background: #fff3cd;
-    color: #856404;
+.section-title p{
+    color:#666;
+    margin-top:5px;
 }
 
-.approved {
-    background: #d4edda;
-    color: #155724;
+/* ================= CARDS ================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:25px;
 }
 
-.rejected {
-    background: #f8d7da;
-    color: #721c24;
+.stat{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
-.action-btn {
-    border: none;
-    padding: 7px 11px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    margin: 2px;
+.stat h3{
+    font-size:30px;
+    color:#087443;
 }
 
-.approve-btn {
-    background: #198754;
-    color: white;
+.stat p{
+    color:#666;
+    margin-top:5px;
 }
 
-.reject-btn {
-    background: #dc3545;
-    color: white;
+/* ================= TOOLBAR ================= */
+
+.toolbar{
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:15px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
 }
 
-.delete-btn {
-    background: #6c757d;
-    color: white;
+input,
+select{
+    padding:11px 12px;
+    border:1px solid #ccc;
+    border-radius:7px;
+    background:white;
+    min-height:42px;
 }
 
-#adminContent {
-    display: none;
+input{
+    min-width:220px;
 }
 
-#errorBox {
-    display: none;
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 25px;
-    background: #f8d7da;
-    color: #721c24;
-    border-radius: 10px;
+.btn{
+    border:0;
+    padding:10px 15px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
 }
 
-.empty {
-    text-align: center;
-    padding: 25px;
-    opacity: .7;
+.btn-primary{
+    background:#087443;
+    color:white;
 }
 
+.btn-danger{
+    background:#c62828;
+    color:white;
+}
+
+.btn-warning{
+    background:#e69100;
+    color:white;
+}
+
+.btn-secondary{
+    background:#555;
+    color:white;
+}
+
+/* ================= TABLE ================= */
+
+.table-wrapper{
+    background:white;
+    border-radius:10px;
+    overflow:auto;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:900px;
+}
+
+th{
+    background:#087443;
+    color:white;
+    padding:13px;
+    text-align:left;
+    font-size:13px;
+}
+
+td{
+    padding:12px;
+    border-bottom:1px solid #eee;
+    font-size:14px;
+}
+
+tr:hover{
+    background:#f5faf7;
+}
+
+.actions{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
+.actions button{
+    padding:7px 10px;
+    border:0;
+    border-radius:5px;
+    cursor:pointer;
+    color:white;
+    font-size:12px;
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    z-index:2000;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    background:white;
+    width:100%;
+    max-width:600px;
+    max-height:90vh;
+    overflow:auto;
+    border-radius:12px;
+    padding:25px;
+}
+
+.modal-box h2{
+    color:#087443;
+    margin-bottom:20px;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+}
+
+.modal-buttons{
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+    margin-top:20px;
+}
+
+/* ================= STATUS ================= */
+
+.message{
+    padding:12px 15px;
+    border-radius:7px;
+    margin-bottom:15px;
+    display:none;
+}
+
+.message.success{
+    display:block;
+    background:#dff4e7;
+    color:#126b39;
+}
+
+.message.error{
+    display:block;
+    background:#fde3e3;
+    color:#a31c1c;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 8px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.badge-pending{
+    background:#fff0c7;
+    color:#8a6100;
+}
+
+.badge-approved{
+    background:#dff4e7;
+    color:#126b39;
+}
+
+.badge-rejected{
+    background:#fde3e3;
+    color:#a31c1c;
+}
+
+/* ================= MOBILE ================= */
+
+.mobile-menu{
+    display:none;
+    background:#103c27;
+    color:white;
+    border:0;
+    padding:10px 14px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+@media(max-width:900px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .sidebar{
+        position:fixed;
+        left:-250px;
+        top:75px;
+        bottom:0;
+        z-index:1500;
+        transition:.25s;
+    }
+
+    .sidebar.open{
+        left:0;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .main{
+        padding:15px;
+    }
+}
+
+@media(max-width:600px){
+
+    .header{
+        padding:14px;
+    }
+
+    .header h1{
+        font-size:17px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .stat h3{
+        font-size:23px;
+    }
+
+    .toolbar{
+        flex-direction:column;
+    }
+
+    input,
+    select,
+    .toolbar .btn{
+        width:100%;
+    }
+}
 </style>
-
 </head>
-
 
 <body>
 
+<header class="header">
 
-<!-- =====================================================
-     NAVIGATION
-===================================================== -->
-
-<nav class="navbar">
-
-    <div class="container nav-inner">
-
-        <a href="index.html" class="logo">
-            BWI-RHA <span>EKITI</span>
-        </a>
-
-        <button
-            class="menu-btn"
-            id="menuBtn"
-            type="button"
-        >
-            ☰
+    <div>
+        <button class="mobile-menu" onclick="toggleSidebar()">
+            ☰ Menu
         </button>
 
-        <div
-            class="nav-links"
-            id="navLinks"
-        >
+        <h1>BWI-RHA Ekiti State — Admin Panel</h1>
+        <small id="adminEmail">Checking administrator...</small>
+    </div>
 
-            <a href="index.html">
-                Home
-            </a>
+    <button class="logout" onclick="logout()">
+        Logout
+    </button>
 
-            <a href="lga.html">
-                LGAs
-            </a>
+</header>
 
-            <a href="create-account.html">
-                Create Account
-            </a>
+<div class="layout">
 
-            <a href="login.html">
-                Login
-            </a>
+<aside class="sidebar" id="sidebar">
 
-            <a href="admin.html">
-                Admin
-            </a>
+    <button class="active" onclick="showSection('dashboard',this)">
+        📊 Dashboard
+    </button>
 
+    <button onclick="showSection('members',this)">
+        👩 Members
+    </button>
+
+    <button onclick="showSection('excos',this)">
+        👔 EXCO Management
+    </button>
+
+    <button onclick="showSection('stateExcos',this)">
+        🏛️ State EXCO
+    </button>
+
+    <button onclick="showSection('lgaExcos',this)">
+        🏢 LGA EXCO
+    </button>
+
+    <button onclick="showSection('wardExcos',this)">
+        📍 Ward EXCO
+    </button>
+
+</aside>
+
+<main class="main">
+
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboard" class="section active">
+
+    <div class="section-title">
+        <h2>Dashboard</h2>
+        <p>Overview of BWI-RHA Ekiti State.</p>
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+            <h3 id="statMembers">0</h3>
+            <p>Total Members</p>
+        </div>
+
+        <div class="stat">
+            <h3 id="statPending">0</h3>
+            <p>Pending Members</p>
+        </div>
+
+        <div class="stat">
+            <h3 id="statApproved">0</h3>
+            <p>Approved Members</p>
+        </div>
+
+        <div class="stat">
+            <h3 id="statExcos">0</h3>
+            <p>Total EXCO Records</p>
         </div>
 
     </div>
 
-</nav>
+    <div id="dashboardMessage" class="message"></div>
 
+</section>
 
+<!-- ================= MEMBERS ================= -->
 
-<!-- =====================================================
-     LOADING
-===================================================== -->
+<section id="members" class="section">
 
-<div
-    id="loading"
-    style="
-        text-align:center;
-        padding:60px 20px;
-    "
->
-    Checking administrator access...
-</div>
+    <div class="section-title">
+        <h2>Member Management</h2>
+        <p>Approve, reject and manage registered members.</p>
+    </div>
 
+    <div class="toolbar">
 
+        <input
+            type="search"
+            id="memberSearch"
+            placeholder="Search name, phone or email..."
+            oninput="filterMembers()"
+        >
 
-<!-- =====================================================
-     ERROR
-===================================================== -->
+        <select id="memberStatusFilter" onchange="filterMembers()">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+        </select>
 
-<div id="errorBox">
+        <button class="btn btn-primary" onclick="loadMembers()">
+            🔄 Refresh
+        </button>
 
-    <h2>
-        Admin Panel Error
-    </h2>
+    </div>
 
-    <p id="errorText"></p>
+    <div id="memberMessage" class="message"></div>
 
-    <button
-        class="btn btn-primary"
-        onclick="location.reload()"
-    >
-        Try Again
-    </button>
+    <div class="table-wrapper">
 
-</div>
+        <table>
 
+            <thead>
 
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>LGA</th>
+                    <th>Ward</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
 
-<!-- =====================================================
-     ADMIN CONTENT
-===================================================== -->
+            </thead>
 
-<main
-    id="adminContent"
-    class="admin-wrapper"
->
+            <tbody id="membersTable">
+                <tr>
+                    <td colspan="7">Loading members...</td>
+                </tr>
+            </tbody>
 
+        </table>
 
-    <div class="admin-top">
+    </div>
 
-        <div>
+</section>
 
-            <h1>
-                Admin Dashboard
-            </h1>
+<!-- ================= EXCO MANAGEMENT ================= -->
 
-            <p id="adminName">
-                Administrator
-            </p>
+<section id="excos" class="section">
 
-        </div>
+    <div class="section-title">
+        <h2>EXCO Management</h2>
+        <p>Manage National, State, LGA and Ward EXCOs.</p>
+    </div>
 
+    <div class="toolbar">
+
+        <input
+            type="search"
+            id="excoSearch"
+            placeholder="Search EXCO name, phone or position..."
+            oninput="filterExcos()"
+        >
+
+        <select id="excoLevelFilter" onchange="filterExcos()">
+            <option value="">All Levels</option>
+            <option value="national">National</option>
+            <option value="state">State</option>
+            <option value="lga">LGA</option>
+            <option value="ward">Ward</option>
+        </select>
+
+        <button class="btn btn-primary" onclick="openExcoModal()">
+            ➕ Add EXCO
+        </button>
+
+        <button class="btn btn-secondary" onclick="loadExcos()">
+            🔄 Refresh
+        </button>
+
+    </div>
+
+    <div id="excoMessage" class="message"></div>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Level</th>
+                    <th>LGA</th>
+                    <th>Ward</th>
+                    <th>Position</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="excosTable">
+                <tr>
+                    <td colspan="7">Loading EXCOs...</td>
+                </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- ================= STATE EXCO ================= -->
+
+<section id="stateExcos" class="section">
+
+    <div class="section-title">
+        <h2>State EXCO</h2>
+        <p>Manage Ekiti State-level officers.</p>
+    </div>
+
+    <div class="toolbar">
 
         <button
             class="btn btn-primary"
-            onclick="logout()"
+            onclick="setExcoLevel('state')"
         >
-            Logout
+            ➕ Add State EXCO
+        </button>
+
+        <button
+            class="btn btn-secondary"
+            onclick="showSection('excos')"
+        >
+            View All EXCOs
         </button>
 
     </div>
 
+    <div class="table-wrapper">
 
+        <table>
 
-    <!-- =================================================
-         STATISTICS
-    ================================================== -->
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
 
-    <div class="admin-grid">
+            <tbody id="stateExcosTable">
+                <tr>
+                    <td colspan="4">Loading...</td>
+                </tr>
+            </tbody>
 
-
-        <div class="stat-card">
-
-            <h3>
-                Total Members
-            </h3>
-
-            <div
-                class="stat-number"
-                id="totalMembers"
-            >
-                0
-            </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <h3>
-                Pending
-            </h3>
-
-            <div
-                class="stat-number"
-                id="pendingMembers"
-            >
-                0
-            </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <h3>
-                Approved
-            </h3>
-
-            <div
-                class="stat-number"
-                id="approvedMembers"
-            >
-                0
-            </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <h3>
-                Rejected
-            </h3>
-
-            <div
-                class="stat-number"
-                id="rejectedMembers"
-            >
-                0
-            </div>
-
-        </div>
-
+        </table>
 
     </div>
 
+</section>
 
+<!-- ================= LGA EXCO ================= -->
 
-    <!-- =================================================
-         MEMBERS
-    ================================================== -->
+<section id="lgaExcos" class="section">
 
-    <section class="admin-section">
+    <div class="section-title">
+        <h2>LGA EXCO</h2>
+        <p>Manage officers for each Local Government Area.</p>
+    </div>
 
-        <h2>
-            Member Registrations
-        </h2>
+    <div class="toolbar">
 
-        <div class="table-wrapper">
+        <select id="lgaExcoFilter" onchange="loadLevelTables()">
+            <option value="">All LGAs</option>
+        </select>
 
-            <table>
+        <button
+            class="btn btn-primary"
+            onclick="setExcoLevel('lga')"
+        >
+            ➕ Add LGA EXCO
+        </button>
 
-                <thead>
+    </div>
 
-                    <tr>
+    <div class="table-wrapper">
 
-                        <th>Name</th>
+        <table>
 
-                        <th>Phone</th>
+            <thead>
+                <tr>
+                    <th>LGA</th>
+                    <th>Position</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
 
-                        <th>Email</th>
+            <tbody id="lgaExcosTable">
+                <tr>
+                    <td colspan="5">Loading...</td>
+                </tr>
+            </tbody>
 
-                        <th>LGA</th>
+        </table>
 
-                        <th>Ward</th>
+    </div>
 
-                        <th>Status</th>
+</section>
 
-                        <th>Action</th>
+<!-- ================= WARD EXCO ================= -->
 
-                    </tr>
+<section id="wardExcos" class="section">
 
-                </thead>
+    <div class="section-title">
+        <h2>Ward EXCO</h2>
+        <p>Manage officers for all Ekiti wards.</p>
+    </div>
 
-                <tbody id="membersTable">
+    <div class="toolbar">
 
-                    <tr>
+        <select id="wardLgaFilter" onchange="loadWardOptions()">
+            <option value="">All LGAs</option>
+        </select>
 
-                        <td
-                            colspan="7"
-                            class="empty"
-                        >
-                            Loading members...
-                        </td>
+        <select id="wardExcoFilter" onchange="loadLevelTables()">
+            <option value="">All Wards</option>
+        </select>
 
-                    </tr>
+        <button
+            class="btn btn-primary"
+            onclick="setExcoLevel('ward')"
+        >
+            ➕ Add Ward EXCO
+        </button>
 
-                </tbody>
+    </div>
 
-            </table>
+    <div class="table-wrapper">
 
-        </div>
+        <table>
 
-    </section>
+            <thead>
+                <tr>
+                    <th>LGA</th>
+                    <th>Ward</th>
+                    <th>Position</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
 
+            <tbody id="wardExcosTable">
+                <tr>
+                    <td colspan="6">Loading...</td>
+                </tr>
+            </tbody>
 
+        </table>
 
-    <!-- =================================================
-         EXCO FORM
-    ================================================== -->
+    </div>
 
-    <section class="admin-section">
-
-        <h2>
-            Add Ward EXCO
-        </h2>
-
-        <form id="excoForm">
-
-            <div class="form-grid">
-
-
-                <div class="form-group">
-
-                    <label>
-                        LGA
-                    </label>
-
-                    <select
-                        id="excoLga"
-                        class="form-control"
-                        required
-                    >
-
-                        <option value="">
-                            Select LGA
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        Ward
-                    </label>
-
-                    <select
-                        id="excoWard"
-                        class="form-control"
-                        required
-                        disabled
-                    >
-
-                        <option value="">
-                            Select LGA first
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        Position
-                    </label>
-
-                    <select
-                        id="excoPosition"
-                        class="form-control"
-                        required
-                    >
-
-                        <option value="">
-                            Select Position
-                        </option>
-
-                        <option>
-                            Ward Coordinator
-                        </option>
-
-                        <option>
-                            Deputy Ward Coordinator
-                        </option>
-
-                        <option>
-                            Secretary
-                        </option>
-
-                        <option>
-                            Mobilization Officer
-                        </option>
-
-                        <option>
-                            Women Empowerment Officer
-                        </option>
-
-                        <option>
-                            Media/Publicity Officer
-                        </option>
-
-                        <option>
-                            Welfare Officer
-                        </option>
-
-                        <option>
-                            Polling Unit Officer
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        Full Name
-                    </label>
-
-                    <input
-                        type="text"
-                        id="excoName"
-                        class="form-control"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        Phone Number
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="excoPhone"
-                        class="form-control"
-                    >
-
-                </div>
-
-
-                <div>
-
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                        id="addExcoBtn"
-                    >
-                        Add EXCO
-                    </button>
-
-                </div>
-
-
-            </div>
-
-        </form>
-
-    </section>
-
-
-
-    <!-- =================================================
-         EXCOS
-    ================================================== -->
-
-    <section class="admin-section">
-
-        <h2>
-            Current Ward EXCOs
-        </h2>
-
-        <div class="table-wrapper">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>LGA</th>
-
-                        <th>Ward</th>
-
-                        <th>Position</th>
-
-                        <th>Name</th>
-
-                        <th>Phone</th>
-
-                        <th>Action</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody id="excoTable">
-
-                    <tr>
-
-                        <td
-                            colspan="6"
-                            class="empty"
-                        >
-                            Loading EXCOs...
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
+</section>
 
 </main>
+</div>
 
+<!-- ================= EXCO MODAL ================= -->
 
+<div class="modal" id="excoModal">
 
-<footer>
+<div class="modal-box">
 
-    <div class="container">
+    <h2 id="modalTitle">Add EXCO</h2>
 
-        <p>
-            © 2026 BWI-RHA Ekiti State Chapter
-        </p>
+    <div id="modalMessage" class="message"></div>
+
+    <input type="hidden" id="excoId">
+
+    <div class="form-group">
+
+        <label>Level</label>
+
+        <select id="excoLevel" onchange="handleLevelChange()">
+
+            <option value="national">National</option>
+            <option value="state">State</option>
+            <option value="lga">LGA</option>
+            <option value="ward">Ward</option>
+
+        </select>
 
     </div>
 
-</footer>
+    <div class="form-group" id="lgaGroup">
 
+        <label>LGA</label>
 
+        <select id="excoLga" onchange="loadModalWards()">
 
-<script src="supabase.js"></script>
+            <option value="">Select LGA</option>
 
+        </select>
+
+    </div>
+
+    <div class="form-group" id="wardGroup">
+
+        <label>Ward</label>
+
+        <select id="excoWard">
+
+            <option value="">Select Ward</option>
+
+        </select>
+
+    </div>
+
+    <div class="form-group">
+
+        <label>Position</label>
+
+        <input
+            type="text"
+            id="excoPosition"
+            placeholder="e.g. Ward Coordinator"
+        >
+
+    </div>
+
+    <div class="form-group">
+
+        <label>Full Name</label>
+
+        <input
+            type="text"
+            id="excoName"
+            placeholder="Enter full name"
+        >
+
+    </div>
+
+    <div class="form-group">
+
+        <label>Phone Number</label>
+
+        <input
+            type="tel"
+            id="excoPhone"
+            placeholder="Enter phone number"
+        >
+
+    </div>
+
+    <div class="modal-buttons">
+
+        <button
+            class="btn btn-secondary"
+            onclick="closeExcoModal()"
+        >
+            Cancel
+        </button>
+
+        <button
+            class="btn btn-primary"
+            onclick="saveExco()"
+        >
+            Save EXCO
+        </button>
+
+    </div>
+
+</div>
+
+</div>
 
 <script>
 
@@ -691,1069 +911,1397 @@ th {
    SUPABASE
 ===================================================== */
 
-const client = db;
+const SUPABASE_URL =
+    "https://cuxtjtocodgjgiuinrkc.supabase.co";
 
+const SUPABASE_ANON_KEY =
+    "YOUR_SUPABASE_ANON_KEY";
 
-
-/* =====================================================
-   MOBILE MENU
-===================================================== */
-
-const menuBtn =
-    document.getElementById("menuBtn");
-
-const navLinks =
-    document.getElementById("navLinks");
-
-
-menuBtn.addEventListener(
-    "click",
-    function () {
-
-        navLinks.classList.toggle("open");
-
-    }
-);
-
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
 
 
 /* =====================================================
-   ERROR HANDLER
+   GLOBAL DATA
 ===================================================== */
 
-function showError(error) {
+let members = [];
+let excos = [];
+let lgas = [];
+let wards = [];
 
-    console.error(error);
-
-    document.getElementById(
-        "loading"
-    ).style.display = "none";
-
-    document.getElementById(
-        "adminContent"
-    ).style.display = "none";
-
-    document.getElementById(
-        "errorBox"
-    ).style.display = "block";
-
-    document.getElementById(
-        "errorText"
-    ).textContent =
-        error?.message ||
-        String(error);
-
-}
-
+let currentExcoLevel = "national";
 
 
 /* =====================================================
-   ESCAPE HTML
+   INITIALIZATION
 ===================================================== */
 
-function escapeHTML(value) {
-
-    if (value === null ||
-        value === undefined) {
-
-        return "";
-
-    }
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-
-/* =====================================================
-   CHECK ADMIN
-===================================================== */
-
-async function checkAdmin() {
+document.addEventListener("DOMContentLoaded", async () => {
 
     const {
         data: {
-            user
-        },
-        error: authError
-    } = await client.auth.getUser();
+            session
+        }
+    } = await supabaseClient.auth.getSession();
 
-
-    if (authError) {
-
-        throw authError;
-
-    }
-
-
-    if (!user) {
+    if (!session) {
 
         window.location.href =
-            "login.html";
+            "admin-login.html";
 
-        return false;
-
+        return;
     }
 
+    await verifyAdmin(session.user.id);
+
+});
+
+
+/* =====================================================
+   VERIFY ADMIN
+===================================================== */
+
+async function verifyAdmin(userId){
 
     const {
         data,
         error
-    } = await client
+    } = await supabaseClient
         .from("admins")
-        .select(
-            "id,user_id,full_name,email,active"
-        )
-        .eq(
-            "user_id",
-            user.id
-        )
-        .eq(
-            "active",
-            true
-        )
+        .select("*")
+        .eq("user_id", userId)
+        .eq("active", true)
         .maybeSingle();
 
+    if(error){
 
-    if (error) {
-
-        throw error;
-
-    }
-
-
-    if (!data) {
-
-        document.getElementById(
-            "loading"
-        ).innerHTML = `
-
-            <h2>
-                Access Denied
-            </h2>
-
-            <p>
-                Your account is not an active
-                administrator.
-            </p>
-
-            <br>
-
-            <a
-                href="index.html"
-                class="btn btn-primary"
-            >
-                Return Home
-            </a>
-
-        `;
-
-        return false;
-
-    }
-
-
-    document.getElementById(
-        "adminName"
-    ).textContent =
-        data.full_name ||
-        data.email ||
-        user.email;
-
-
-    document.getElementById(
-        "loading"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "adminContent"
-    ).style.display =
-        "block";
-
-
-    return true;
-
-}
-
-
-
-/* =====================================================
-   LOAD MEMBERS
-===================================================== */
-
-async function loadMembers() {
-
-    const table =
-        document.getElementById(
-            "membersTable"
-        );
-
-
-    const {
-        data,
-        error
-    } = await client
-        .from("members")
-        .select(
-            "id,name,phone_no,email,lga_id,ward_id,status,created_at"
-        )
-        .order(
-            "created_at",
-            {
-                ascending: false
-            }
-        );
-
-
-    if (error) {
-
-        throw error;
-
-    }
-
-
-    const members =
-        data || [];
-
-
-    let pending = 0;
-    let approved = 0;
-    let rejected = 0;
-
-
-    members.forEach(
-        member => {
-
-            if (
-                member.status ===
-                "pending"
-            ) pending++;
-
-            if (
-                member.status ===
-                "approved"
-            ) approved++;
-
-            if (
-                member.status ===
-                "rejected"
-            ) rejected++;
-
-        }
-    );
-
-
-    document.getElementById(
-        "totalMembers"
-    ).textContent =
-        members.length;
-
-
-    document.getElementById(
-        "pendingMembers"
-    ).textContent =
-        pending;
-
-
-    document.getElementById(
-        "approvedMembers"
-    ).textContent =
-        approved;
-
-
-    document.getElementById(
-        "rejectedMembers"
-    ).textContent =
-        rejected;
-
-
-    if (!members.length) {
-
-        table.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="7"
-                    class="empty"
-                >
-                    No members found.
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    const [
-        lgaResult,
-        wardResult
-    ] = await Promise.all([
-
-        client
-            .from("lgas")
-            .select("id,name"),
-
-        client
-            .from("wards")
-            .select("id,name")
-
-    ]);
-
-
-    if (lgaResult.error)
-        throw lgaResult.error;
-
-    if (wardResult.error)
-        throw wardResult.error;
-
-
-    const lgaMap = {};
-
-    const wardMap = {};
-
-
-    lgaResult.data.forEach(
-        lga => {
-
-            lgaMap[lga.id] =
-                lga.name;
-
-        }
-    );
-
-
-    wardResult.data.forEach(
-        ward => {
-
-            wardMap[ward.id] =
-                ward.name;
-
-        }
-    );
-
-
-    table.innerHTML = "";
-
-
-    members.forEach(
-        member => {
-
-            const row =
-                document.createElement(
-                    "tr"
-                );
-
-
-            const status =
-                String(
-                    member.status ||
-                    ""
-                ).toLowerCase();
-
-
-            row.innerHTML = `
-
-                <td>
-                    ${escapeHTML(
-                        member.name
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        member.phone_no
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        member.email
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        lgaMap[
-                            member.lga_id
-                        ] || "-"
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        wardMap[
-                            member.ward_id
-                        ] || "-"
-                    )}
-                </td>
-
-                <td>
-
-                    <span
-                        class="status ${status}"
-                    >
-                        ${escapeHTML(
-                            status.toUpperCase()
-                        )}
-                    </span>
-
-                </td>
-
-                <td>
-
-                    ${
-                        status === "pending"
-                        ? `
-
-                            <button
-                                class="action-btn approve-btn"
-                                onclick="
-                                    updateMember(
-                                        '${member.id}',
-                                        'approved'
-                                    )
-                                "
-                            >
-                                Approve
-                            </button>
-
-                            <button
-                                class="action-btn reject-btn"
-                                onclick="
-                                    updateMember(
-                                        '${member.id}',
-                                        'rejected'
-                                    )
-                                "
-                            >
-                                Reject
-                            </button>
-
-                        `
-                        : "-"
-                    }
-
-                </td>
-
-            `;
-
-
-            table.appendChild(row);
-
-        }
-    );
-
-}
-
-
-
-/* =====================================================
-   UPDATE MEMBER
-===================================================== */
-
-async function updateMember(
-    id,
-    status
-) {
-
-    const action =
-        status === "approved"
-            ? "approve"
-            : "reject";
-
-
-    if (
-        !confirm(
-            `Are you sure you want to ${action} this member?`
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    const {
-        error
-    } = await client
-        .from("members")
-        .update({
-            status: status,
-            updated_at:
-                new Date().toISOString()
-        })
-        .eq(
-            "id",
-            id
-        );
-
-
-    if (error) {
+        console.error(error);
 
         alert(
-            "Unable to update member:\n\n" +
+            "Unable to verify administrator: " +
             error.message
         );
 
         return;
-
     }
 
+    if(!data){
 
-    await loadMembers();
+        alert(
+            "This account is not registered as an administrator."
+        );
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+            "admin-login.html";
+
+        return;
+    }
+
+    document.getElementById(
+        "adminEmail"
+    ).textContent =
+        data.email || "Administrator";
+
+    await initializeAdmin();
 
 }
 
+
+/* =====================================================
+   INITIALIZE DATA
+===================================================== */
+
+async function initializeAdmin(){
+
+    await Promise.all([
+        loadLGAs(),
+        loadWards(),
+        loadMembers(),
+        loadExcos()
+    ]);
+
+    updateDashboard();
+    loadLevelTables();
+
+}
 
 
 /* =====================================================
    LOAD LGAS
 ===================================================== */
 
-async function loadLGAs() {
-
-    const select =
-        document.getElementById(
-            "excoLga"
-        );
-
+async function loadLGAs(){
 
     const {
         data,
         error
-    } = await client
+    } = await supabaseClient
         .from("lgas")
-        .select("id,name")
+        .select("*")
         .order("name");
 
+    if(error){
 
-    if (error) {
+        console.error("LGA error:",error);
 
-        throw error;
-
+        return;
     }
 
+    lgas = data || [];
 
-    select.innerHTML =
-        `<option value="">
-            Select LGA
-        </option>`;
-
-
-    data.forEach(
-        lga => {
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-            option.value =
-                lga.id;
-
-            option.textContent =
-                lga.name;
-
-            select.appendChild(
-                option
-            );
-
-        }
-    );
-
+    populateLgaSelects();
 }
-
 
 
 /* =====================================================
    LOAD WARDS
 ===================================================== */
 
-document
-    .getElementById("excoLga")
-    .addEventListener(
-        "change",
-        async function () {
+async function loadWards(){
 
-            const wardSelect =
-                document.getElementById(
-                    "excoWard"
-                );
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("wards")
+        .select("*")
+        .order("name");
 
+    if(error){
 
-            wardSelect.disabled =
-                true;
+        console.error("Ward error:",error);
 
+        return;
+    }
 
-            wardSelect.innerHTML =
-                `<option>
-                    Loading wards...
-                </option>`;
+    wards = data || [];
 
-
-            if (!this.value) {
-
-                wardSelect.innerHTML =
-                    `<option value="">
-                        Select LGA first
-                    </option>`;
-
-                return;
-
-            }
-
-
-            const {
-                data,
-                error
-            } = await client
-                .from("wards")
-                .select(
-                    "id,name,ward_number"
-                )
-                .eq(
-                    "lga_id",
-                    this.value
-                )
-                .order(
-                    "ward_number"
-                );
-
-
-            if (error) {
-
-                alert(
-                    "Unable to load wards:\n\n" +
-                    error.message
-                );
-
-                return;
-
-            }
-
-
-            wardSelect.innerHTML =
-                `<option value="">
-                    Select Ward
-                </option>`;
-
-
-            data.forEach(
-                ward => {
-
-                    const option =
-                        document.createElement(
-                            "option"
-                        );
-
-                    option.value =
-                        ward.id;
-
-                    option.textContent =
-                        ward.name;
-
-                    wardSelect.appendChild(
-                        option
-                    );
-
-                }
-            );
-
-
-            wardSelect.disabled =
-                false;
-
-        }
-    );
-
+}
 
 
 /* =====================================================
-   ADD EXCO
+   POPULATE LGA SELECTS
 ===================================================== */
 
-document
-    .getElementById("excoForm")
-    .addEventListener(
-        "submit",
-        async function (event) {
+function populateLgaSelects(){
 
-            event.preventDefault();
+    const selects = [
+        "excoLga",
+        "lgaExcoFilter",
+        "wardLgaFilter"
+    ];
 
+    selects.forEach(id => {
 
-            const lgaId =
-                document.getElementById(
-                    "excoLga"
-                ).value;
+        const select =
+            document.getElementById(id);
 
+        if(!select) return;
 
-            const wardId =
-                document.getElementById(
-                    "excoWard"
-                ).value;
+        const first =
+            select.options[0]?.textContent ||
+            "Select LGA";
 
+        select.innerHTML =
+            `<option value="">${first}</option>`;
 
-            const position =
-                document.getElementById(
-                    "excoPosition"
-                ).value;
+        lgas.forEach(lga => {
 
+            const option =
+                document.createElement("option");
 
-            const fullName =
-                document.getElementById(
-                    "excoName"
-                ).value.trim();
+            option.value = lga.id;
 
+            option.textContent =
+                lga.name;
 
-            const phoneNo =
-                document.getElementById(
-                    "excoPhone"
-                ).value.trim();
+            select.appendChild(option);
 
+        });
 
-            const button =
-                document.getElementById(
-                    "addExcoBtn"
-                );
+    });
+
+}
 
 
-            button.disabled =
-                true;
+/* =====================================================
+   WARD OPTIONS
+===================================================== */
 
-            button.textContent =
-                "Adding...";
+function loadWardOptions(){
 
+    const lgaId =
+        document.getElementById(
+            "wardLgaFilter"
+        ).value;
 
-            try {
+    const select =
+        document.getElementById(
+            "wardExcoFilter"
+        );
 
-                const {
-                    data: lga,
-                    error: lgaError
-                } = await client
-                    .from("lgas")
-                    .select("state_id")
-                    .eq(
-                        "id",
-                        lgaId
-                    )
-                    .single();
+    select.innerHTML =
+        `<option value="">All Wards</option>`;
 
+    wards
+        .filter(w =>
+            !lgaId ||
+            w.lga_id === lgaId
+        )
+        .forEach(w => {
 
-                if (lgaError)
-                    throw lgaError;
+            const option =
+                document.createElement("option");
 
+            option.value = w.id;
 
-                const {
-                    error
-                } = await client
-                    .from("excos")
-                    .insert({
+            option.textContent =
+                w.name;
 
-                        level:
-                            "ward",
+            select.appendChild(option);
 
-                        state_id:
-                            lga.state_id,
+        });
 
-                        lga_id:
-                            lgaId,
+    loadLevelTables();
 
-                        ward_id:
-                            wardId,
-
-                        position:
-                            position,
-
-                        full_name:
-                            fullName,
-
-                        phone_no:
-                            phoneNo || null
-
-                    });
+}
 
 
-                if (error)
-                    throw error;
+/* =====================================================
+   MODAL WARDS
+===================================================== */
+
+function loadModalWards(){
+
+    const lgaId =
+        document.getElementById(
+            "excoLga"
+        ).value;
+
+    const select =
+        document.getElementById(
+            "excoWard"
+        );
+
+    select.innerHTML =
+        `<option value="">Select Ward</option>`;
+
+    wards
+        .filter(w =>
+            w.lga_id === lgaId
+        )
+        .forEach(w => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = w.id;
+
+            option.textContent =
+                w.name;
+
+            select.appendChild(option);
+
+        });
+
+}
 
 
-                alert(
-                    "EXCO added successfully."
-                );
+/* =====================================================
+   LOAD MEMBERS
+===================================================== */
+
+async function loadMembers(){
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("members")
+        .select(`
+            *,
+            lgas(name),
+            wards(name)
+        `)
+        .order("created_at",{
+            ascending:false
+        });
+
+    if(error){
+
+        console.error(error);
+
+        showMessage(
+            "memberMessage",
+            "Unable to load members: " +
+            error.message,
+            "error"
+        );
+
+        return;
+    }
+
+    members = data || [];
+
+    renderMembers();
+
+    updateDashboard();
+
+}
 
 
-                this.reset();
+/* =====================================================
+   RENDER MEMBERS
+===================================================== */
+
+function renderMembers(){
+
+    const search =
+        (
+            document.getElementById(
+                "memberSearch"
+            )?.value || ""
+        ).toLowerCase();
+
+    const status =
+        document.getElementById(
+            "memberStatusFilter"
+        )?.value || "";
+
+    const filtered =
+        members.filter(m => {
+
+            const name =
+                String(
+                    m.full_name ||
+                    m.name ||
+                    ""
+                ).toLowerCase();
+
+            const phone =
+                String(
+                    m.phone ||
+                    m.phone_no ||
+                    ""
+                ).toLowerCase();
+
+            const email =
+                String(
+                    m.email || ""
+                ).toLowerCase();
+
+            const matchesSearch =
+                !search ||
+                name.includes(search) ||
+                phone.includes(search) ||
+                email.includes(search);
+
+            const matchesStatus =
+                !status ||
+                m.status === status;
+
+            return (
+                matchesSearch &&
+                matchesStatus
+            );
+
+        });
+
+    const tbody =
+        document.getElementById(
+            "membersTable"
+        );
+
+    if(!filtered.length){
+
+        tbody.innerHTML =
+            `<tr>
+                <td colspan="7">
+                    No members found.
+                </td>
+            </tr>`;
+
+        return;
+    }
+
+    tbody.innerHTML =
+        filtered.map(m => {
+
+            const statusClass =
+                m.status === "approved"
+                    ? "badge-approved"
+                    : m.status === "rejected"
+                        ? "badge-rejected"
+                        : "badge-pending";
+
+            const lga =
+                m.lgas?.name || "-";
+
+            const ward =
+                m.wards?.name || "-";
+
+            return `
+            <tr>
+
+                <td>
+                    ${escapeHTML(
+                        m.full_name ||
+                        m.name ||
+                        "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        m.phone ||
+                        m.phone_no ||
+                        "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        m.email || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(lga)}
+                </td>
+
+                <td>
+                    ${escapeHTML(ward)}
+                </td>
+
+                <td>
+                    <span class="badge ${statusClass}">
+                        ${escapeHTML(
+                            m.status ||
+                            "pending"
+                        )}
+                    </span>
+                </td>
+
+                <td>
+
+                    <div class="actions">
+
+                        ${
+                            m.status !== "approved"
+                            ?
+                            `<button
+                                style="background:#087443"
+                                onclick="updateMemberStatus('${m.id}','approved')"
+                            >
+                                Approve
+                            </button>`
+                            :
+                            ""
+                        }
+
+                        ${
+                            m.status !== "rejected"
+                            ?
+                            `<button
+                                style="background:#c62828"
+                                onclick="updateMemberStatus('${m.id}','rejected')"
+                            >
+                                Reject
+                            </button>`
+                            :
+                            ""
+                        }
+
+                    </div>
+
+                </td>
+
+            </tr>
+            `;
+
+        }).join("");
+
+}
 
 
-                document.getElementById(
-                    "excoWard"
-                ).innerHTML =
-                    `<option value="">
-                        Select LGA first
-                    </option>`;
+/* =====================================================
+   FILTER MEMBERS
+===================================================== */
+
+function filterMembers(){
+
+    renderMembers();
+
+}
 
 
-                document.getElementById(
-                    "excoWard"
-                ).disabled =
-                    true;
+/* =====================================================
+   UPDATE MEMBER STATUS
+===================================================== */
 
+async function updateMemberStatus(
+    id,
+    status
+){
 
-                await loadExcos();
+    const {
+        error
+    } = await supabaseClient
+        .from("members")
+        .update({
+            status: status
+        })
+        .eq("id",id);
 
-            }
-            catch (error) {
+    if(error){
 
-                alert(
-                    "Unable to add EXCO:\n\n" +
-                    error.message
-                );
+        showMessage(
+            "memberMessage",
+            error.message,
+            "error"
+        );
 
-            }
-            finally {
+        return;
+    }
 
-                button.disabled =
-                    false;
-
-                button.textContent =
-                    "Add EXCO";
-
-            }
-
-        }
+    showMessage(
+        "memberMessage",
+        "Member status updated successfully.",
+        "success"
     );
 
+    await loadMembers();
+
+}
 
 
 /* =====================================================
    LOAD EXCOS
 ===================================================== */
 
-async function loadExcos() {
-
-    const table =
-        document.getElementById(
-            "excoTable"
-        );
-
+async function loadExcos(){
 
     const {
         data,
         error
-    } = await client
+    } = await supabaseClient
         .from("excos")
-        .select(
-            "id,lga_id,ward_id,position,full_name,phone_no"
-        )
-        .order(
-            "created_at",
-            {
-                ascending: false
-            }
+        .select(`
+            *,
+            lgas(name),
+            wards(name)
+        `)
+        .order("level")
+        .order("position");
+
+    if(error){
+
+        console.error(error);
+
+        showMessage(
+            "excoMessage",
+            "Unable to load EXCOs: " +
+            error.message,
+            "error"
         );
 
+        return;
+    }
 
-    if (error)
-        throw error;
+    excos = data || [];
+
+    renderExcos();
+
+    updateDashboard();
+
+    loadLevelTables();
+
+}
 
 
-    if (!data.length) {
+/* =====================================================
+   RENDER ALL EXCOS
+===================================================== */
 
-        table.innerHTML = `
+function renderExcos(){
 
+    const search =
+        (
+            document.getElementById(
+                "excoSearch"
+            )?.value || ""
+        ).toLowerCase();
+
+    const level =
+        document.getElementById(
+            "excoLevelFilter"
+        )?.value || "";
+
+    const filtered =
+        excos.filter(e => {
+
+            const text = [
+
+                e.position,
+                e.full_name,
+                e.phone_no,
+                e.lgas?.name,
+                e.wards?.name
+
+            ]
+            .join(" ")
+            .toLowerCase();
+
+            return (
+                (!search ||
+                    text.includes(search))
+                &&
+                (!level ||
+                    e.level === level)
+            );
+
+        });
+
+    const tbody =
+        document.getElementById(
+            "excosTable"
+        );
+
+    if(!filtered.length){
+
+        tbody.innerHTML =
+            `<tr>
+                <td colspan="7">
+                    No EXCO records found.
+                </td>
+            </tr>`;
+
+        return;
+    }
+
+    tbody.innerHTML =
+        filtered.map(e => {
+
+            return `
             <tr>
 
-                <td
-                    colspan="6"
-                    class="empty"
-                >
-                    No EXCOs found.
+                <td>
+                    ${escapeHTML(
+                        e.level || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.lgas?.name || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.wards?.name || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.position || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.full_name ||
+                        "To Be Assigned"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.phone_no || "-"
+                    )}
+                </td>
+
+                <td>
+
+                    <div class="actions">
+
+                        <button
+                            style="background:#087443"
+                            onclick="editExco('${e.id}')"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            style="background:#c62828"
+                            onclick="deleteExco('${e.id}')"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
                 </td>
 
             </tr>
+            `;
 
-        `;
+        }).join("");
+
+}
+
+
+/* =====================================================
+   FILTER EXCOS
+===================================================== */
+
+function filterExcos(){
+
+    renderExcos();
+
+}
+
+
+/* =====================================================
+   LEVEL TABLES
+===================================================== */
+
+function loadLevelTables(){
+
+    /* STATE */
+
+    const state =
+        excos.filter(
+            e => e.level === "state"
+        );
+
+    document.getElementById(
+        "stateExcosTable"
+    ).innerHTML =
+        state.length
+        ?
+        state.map(e => `
+            <tr>
+
+                <td>
+                    ${escapeHTML(e.position || "-")}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.full_name ||
+                        "To Be Assigned"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.phone_no || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${actionButtons(e.id)}
+                </td>
+
+            </tr>
+        `).join("")
+        :
+        `<tr>
+            <td colspan="4">
+                No State EXCO records.
+            </td>
+        </tr>`;
+
+
+    /* LGA */
+
+    const lgaId =
+        document.getElementById(
+            "lgaExcoFilter"
+        )?.value || "";
+
+    const lgaData =
+        excos.filter(e =>
+            e.level === "lga" &&
+            (!lgaId ||
+                e.lga_id === lgaId)
+        );
+
+    document.getElementById(
+        "lgaExcosTable"
+    ).innerHTML =
+        lgaData.length
+        ?
+        lgaData.map(e => `
+            <tr>
+
+                <td>
+                    ${escapeHTML(
+                        e.lgas?.name || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.position || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.full_name ||
+                        "To Be Assigned"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.phone_no || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${actionButtons(e.id)}
+                </td>
+
+            </tr>
+        `).join("")
+        :
+        `<tr>
+            <td colspan="5">
+                No LGA EXCO records.
+            </td>
+        </tr>`;
+
+
+    /* WARD */
+
+    const wardId =
+        document.getElementById(
+            "wardExcoFilter"
+        )?.value || "";
+
+    const wardLgaId =
+        document.getElementById(
+            "wardLgaFilter"
+        )?.value || "";
+
+    const wardData =
+        excos.filter(e =>
+            e.level === "ward" &&
+            (!wardLgaId ||
+                e.lga_id === wardLgaId) &&
+            (!wardId ||
+                e.ward_id === wardId)
+        );
+
+    document.getElementById(
+        "wardExcosTable"
+    ).innerHTML =
+        wardData.length
+        ?
+        wardData.map(e => `
+            <tr>
+
+                <td>
+                    ${escapeHTML(
+                        e.lgas?.name || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.wards?.name || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.position || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.full_name ||
+                        "To Be Assigned"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        e.phone_no || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${actionButtons(e.id)}
+                </td>
+
+            </tr>
+        `).join("")
+        :
+        `<tr>
+            <td colspan="6">
+                No Ward EXCO records.
+            </td>
+        </tr>`;
+
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+function actionButtons(id){
+
+    return `
+        <div class="actions">
+
+            <button
+                style="background:#087443"
+                onclick="editExco('${id}')"
+            >
+                Edit
+            </button>
+
+            <button
+                style="background:#c62828"
+                onclick="deleteExco('${id}')"
+            >
+                Delete
+            </button>
+
+        </div>
+    `;
+
+}
+
+
+/* =====================================================
+   OPEN EXCO MODAL
+===================================================== */
+
+function openExcoModal(
+    level = "national"
+){
+
+    currentExcoLevel =
+        level;
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Add EXCO";
+
+    document.getElementById(
+        "excoId"
+    ).value = "";
+
+    document.getElementById(
+        "excoLevel"
+    ).value = level;
+
+    document.getElementById(
+        "excoPosition"
+    ).value = "";
+
+    document.getElementById(
+        "excoName"
+    ).value = "";
+
+    document.getElementById(
+        "excoPhone"
+    ).value = "";
+
+    document.getElementById(
+        "excoLga"
+    ).value = "";
+
+    document.getElementById(
+        "excoWard"
+    ).innerHTML =
+        `<option value="">
+            Select Ward
+        </option>`;
+
+    handleLevelChange();
+
+    document.getElementById(
+        "excoModal"
+    ).classList.add("show");
+
+}
+
+
+/* =====================================================
+   SET LEVEL
+===================================================== */
+
+function setExcoLevel(level){
+
+    openExcoModal(level);
+
+}
+
+
+/* =====================================================
+   HANDLE LEVEL CHANGE
+===================================================== */
+
+function handleLevelChange(){
+
+    const level =
+        document.getElementById(
+            "excoLevel"
+        ).value;
+
+    const lgaGroup =
+        document.getElementById(
+            "lgaGroup"
+        );
+
+    const wardGroup =
+        document.getElementById(
+            "wardGroup"
+        );
+
+    if(level === "lga"){
+
+        lgaGroup.style.display =
+            "block";
+
+        wardGroup.style.display =
+            "none";
+
+    }
+    else if(level === "ward"){
+
+        lgaGroup.style.display =
+            "block";
+
+        wardGroup.style.display =
+            "block";
+
+    }
+    else{
+
+        lgaGroup.style.display =
+            "none";
+
+        wardGroup.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =====================================================
+   CLOSE MODAL
+===================================================== */
+
+function closeExcoModal(){
+
+    document.getElementById(
+        "excoModal"
+    ).classList.remove("show");
+
+}
+
+
+/* =====================================================
+   SAVE EXCO
+===================================================== */
+
+async function saveExco(){
+
+    const id =
+        document.getElementById(
+            "excoId"
+        ).value;
+
+    const level =
+        document.getElementById(
+            "excoLevel"
+        ).value;
+
+    const lgaId =
+        document.getElementById(
+            "excoLga"
+        ).value || null;
+
+    const wardId =
+        document.getElementById(
+            "excoWard"
+        ).value || null;
+
+    const position =
+        document.getElementById(
+            "excoPosition"
+        ).value.trim();
+
+    const fullName =
+        document.getElementById(
+            "excoName"
+        ).value.trim();
+
+    const phone =
+        document.getElementById(
+            "excoPhone"
+        ).value.trim();
+
+
+    if(!position){
+
+        showMessage(
+            "modalMessage",
+            "Enter the EXCO position.",
+            "error"
+        );
 
         return;
+    }
+
+
+    if(level === "lga" && !lgaId){
+
+        showMessage(
+            "modalMessage",
+            "Select an LGA.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(level === "ward" &&
+       (!lgaId || !wardId)){
+
+        showMessage(
+            "modalMessage",
+            "Select both LGA and Ward.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const payload = {
+
+        level: level,
+
+        lga_id:
+            level === "lga" ||
+            level === "ward"
+                ? lgaId
+                : null,
+
+        ward_id:
+            level === "ward"
+                ? wardId
+                : null,
+
+        position:
+            position,
+
+        full_name:
+            fullName ||
+            "To Be Assigned",
+
+        phone_no:
+            phone || null
+
+    };
+
+
+    let result;
+
+
+    if(id){
+
+        result =
+            await supabaseClient
+                .from("excos")
+                .update(payload)
+                .eq("id",id);
+
+    }
+    else{
+
+        result =
+            await supabaseClient
+                .from("excos")
+                .insert(payload);
 
     }
 
 
-    const [
-        lgas,
-        wards
-    ] = await Promise.all([
+    if(result.error){
 
-        client
-            .from("lgas")
-            .select("id,name"),
+        showMessage(
+            "modalMessage",
+            result.error.message,
+            "error"
+        );
 
-        client
-            .from("wards")
-            .select("id,name")
-
-    ]);
+        return;
+    }
 
 
-    if (lgas.error)
-        throw lgas.error;
+    closeExcoModal();
 
-    if (wards.error)
-        throw wards.error;
-
-
-    const lgaMap = {};
-
-    const wardMap = {};
-
-
-    lgas.data.forEach(
-        lga => {
-
-            lgaMap[lga.id] =
-                lga.name;
-
-        }
+    showMessage(
+        "excoMessage",
+        "EXCO saved successfully.",
+        "success"
     );
 
-
-    wards.data.forEach(
-        ward => {
-
-            wardMap[ward.id] =
-                ward.name;
-
-        }
-    );
-
-
-    table.innerHTML = "";
-
-
-    data.forEach(
-        exco => {
-
-            const row =
-                document.createElement(
-                    "tr"
-                );
-
-
-            row.innerHTML = `
-
-                <td>
-                    ${escapeHTML(
-                        lgaMap[
-                            exco.lga_id
-                        ] || "-"
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        wardMap[
-                            exco.ward_id
-                        ] || "-"
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        exco.position
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        exco.full_name
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        exco.phone_no ||
-                        "-"
-                    )}
-                </td>
-
-                <td>
-
-                    <button
-                        class="action-btn delete-btn"
-                        onclick="
-                            deleteExco(
-                                '${exco.id}'
-                            )
-                        "
-                    >
-                        Delete
-                    </button>
-
-                </td>
-
-            `;
-
-
-            table.appendChild(row);
-
-        }
-    );
+    await loadExcos();
 
 }
 
+
+/* =====================================================
+   EDIT EXCO
+===================================================== */
+
+function editExco(id){
+
+    const e =
+        excos.find(
+            x => x.id === id
+        );
+
+    if(!e) return;
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Edit EXCO";
+
+
+    document.getElementById(
+        "excoId"
+    ).value =
+        e.id;
+
+
+    document.getElementById(
+        "excoLevel"
+    ).value =
+        e.level;
+
+
+    document.getElementById(
+        "excoPosition"
+    ).value =
+        e.position || "";
+
+
+    document.getElementById(
+        "excoName"
+    ).value =
+        e.full_name === "To Be Assigned"
+            ? ""
+            : e.full_name || "";
+
+
+    document.getElementById(
+        "excoPhone"
+    ).value =
+        e.phone_no || "";
+
+
+    document.getElementById(
+        "excoLga"
+    ).value =
+        e.lga_id || "";
+
+
+    loadModalWards();
+
+
+    setTimeout(() => {
+
+        document.getElementById(
+            "excoWard"
+        ).value =
+            e.ward_id || "";
+
+    },50);
+
+
+    handleLevelChange();
+
+
+    document.getElementById(
+        "excoModal"
+    ).classList.add("show");
+
+}
 
 
 /* =====================================================
    DELETE EXCO
 ===================================================== */
 
-async function deleteExco(id) {
+async function deleteExco(id){
 
-    if (
-        !confirm(
-            "Delete this EXCO?"
-        )
-    ) {
+    const e =
+        excos.find(
+            x => x.id === id
+        );
 
-        return;
+    if(!e) return;
 
-    }
+
+    const confirmed =
+        confirm(
+            `Delete ${e.position || "this EXCO"}?`
+        );
+
+    if(!confirmed) return;
 
 
     const {
         error
-    } = await client
+    } = await supabaseClient
         .from("excos")
         .delete()
-        .eq(
-            "id",
-            id
-        );
+        .eq("id",id);
 
 
-    if (error) {
+    if(error){
 
-        alert(
-            "Unable to delete EXCO:\n\n" +
-            error.message
+        showMessage(
+            "excoMessage",
+            "Unable to delete EXCO: " +
+            error.message,
+            "error"
         );
 
         return;
-
     }
+
+
+    showMessage(
+        "excoMessage",
+        "EXCO deleted successfully.",
+        "success"
+    );
 
 
     await loadExcos();
@@ -1761,60 +2309,187 @@ async function deleteExco(id) {
 }
 
 
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+function updateDashboard(){
+
+    document.getElementById(
+        "statMembers"
+    ).textContent =
+        members.length;
+
+
+    document.getElementById(
+        "statPending"
+    ).textContent =
+        members.filter(
+            m => m.status === "pending"
+        ).length;
+
+
+    document.getElementById(
+        "statApproved"
+    ).textContent =
+        members.filter(
+            m => m.status === "approved"
+        ).length;
+
+
+    document.getElementById(
+        "statExcos"
+    ).textContent =
+        excos.length;
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function showSection(
+    id,
+    button
+){
+
+    document
+        .querySelectorAll(".section")
+        .forEach(s =>
+            s.classList.remove("active")
+        );
+
+
+    const section =
+        document.getElementById(id);
+
+    if(section){
+
+        section.classList.add("active");
+
+    }
+
+
+    document
+        .querySelectorAll(".sidebar button")
+        .forEach(b =>
+            b.classList.remove("active")
+        );
+
+
+    if(button){
+
+        button.classList.add("active");
+
+    }
+
+
+    document
+        .getElementById("sidebar")
+        .classList.remove("open");
+
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+}
+
 
 /* =====================================================
    LOGOUT
 ===================================================== */
 
-async function logout() {
+async function logout(){
 
-    await client.auth.signOut();
+    await supabaseClient.auth.signOut();
 
     window.location.href =
-        "index.html";
+        "admin-login.html";
 
 }
-
 
 
 /* =====================================================
-   START
+   MESSAGE
 ===================================================== */
 
-async function startAdmin() {
+function showMessage(
+    id,
+    text,
+    type
+){
 
-    try {
+    const el =
+        document.getElementById(id);
 
-        const allowed =
-            await checkAdmin();
-
-
-        if (!allowed)
-            return;
+    if(!el) return;
 
 
-        await loadMembers();
+    el.textContent =
+        text;
 
-        await loadLGAs();
 
-        await loadExcos();
+    el.className =
+        "message " + type;
 
-    }
-    catch (error) {
 
-        showError(error);
+    setTimeout(() => {
 
-    }
+        el.className =
+            "message";
+
+    },5000);
 
 }
 
 
-startAdmin();
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =====================================================
+   CLOSE MODAL WHEN OUTSIDE
+===================================================== */
+
+document
+    .getElementById("excoModal")
+    .addEventListener(
+        "click",
+        function(e){
+
+            if(e.target === this){
+
+                closeExcoModal();
+
+            }
+
+        }
+    );
 
 </script>
 
-
 </body>
-
 </html>
 ```
